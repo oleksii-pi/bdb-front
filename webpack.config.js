@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     watch: true,
@@ -12,15 +11,13 @@ module.exports = {
     },
     module: {
         rules: [
-
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: "css-loader"
-                })
+                loaders: [
+                    'style-loader',
+                    'css-loader?sourceMap'
+                ]
             }
-
         ]
     },
     plugins: [
@@ -30,7 +27,6 @@ module.exports = {
             $: "jquery",
             jquery: "jquery"
         }),
-        new ExtractTextPlugin("styles.css"),
     ],
 
 };
