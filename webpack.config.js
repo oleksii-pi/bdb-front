@@ -1,5 +1,8 @@
+var webpack = require('webpack');
+
 module.exports = {
     watch: true,
+    devtool: 'source-map',
 
     entry: "./src/js/entry.js",
     output: {
@@ -15,10 +18,11 @@ module.exports = {
     },
     plugins: [
         //new webpack.optimize.UglifyJsPlugin(),
-        // new webpack.ProvidePlugin({
-        //     jQuery: 'jquery',
-        //     $: "jquery",
-        //     jquery: "jquery"
-        // })
-    ]
+        new webpack.ProvidePlugin({
+            jQuery: 'jquery',
+            $: "jquery",
+            jquery: "jquery"
+        })
+    ],
+
 };
