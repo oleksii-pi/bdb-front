@@ -1,4 +1,4 @@
-require('./style.css');
+require('./main.css');
 require('./split.css');
 
 var split = require('split.js');

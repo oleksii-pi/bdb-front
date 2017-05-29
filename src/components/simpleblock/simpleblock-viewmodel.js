@@ -1,7 +1,6 @@
 var ko = require('knockout');
 var vmFactory = require('./../components').ViewModelFactory;
 
-
 module.exports = function (data) {
     var self = this;
 
@@ -22,5 +21,4 @@ module.exports = function (data) {
     self.commandSelect = function() {
         self.selected(!self.selected());
     };
-
-}
+};
