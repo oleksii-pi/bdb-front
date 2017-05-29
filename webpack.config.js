@@ -4,7 +4,7 @@ module.exports = {
     watch: true,
     devtool: 'source-map',
 
-    entry: "./src/js/entry.js",
+    entry: "./src/entry.js",
     output: {
         path: __dirname + '/www/assets',
         filename: "bundle.js"
