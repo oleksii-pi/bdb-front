@@ -5,16 +5,8 @@ module.exports = function(vm, parentNode) {
     var g = d3.select(parentNode);
 
     g.append('rect')
-        .attr("class", "simpleblock")
-        .on('mousedown', function(d) {
-            d.commandSelect();
-
-            // prevent diagram mousedown, that deselect all
-            if (d3.event) {
-                d3.event.preventDefault();
-                d3.event.stopPropagation();
-            }
-        });
+        .attr("class", "element simpleblock")
+    ;
 
     g.append('text');
 
@@ -33,7 +25,6 @@ module.exports = function(vm, parentNode) {
             .attr('y', d => d.y() + 20)
             .html(d => d.id())
         ;
-
 
     };
 

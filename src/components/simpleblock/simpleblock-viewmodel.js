@@ -12,7 +12,7 @@ module.exports = function (data) {
     self.selected = ko.observable(false);
 
     // specific:
-    self.width = ko.observable(data.width || 50);
+    self.width = ko.observable(data.width || 100);
     self.height = ko.observable(data.height || 50);
 
     self.hash = ko.computed(function(){

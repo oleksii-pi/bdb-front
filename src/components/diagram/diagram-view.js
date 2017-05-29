@@ -6,12 +6,16 @@ module.exports = function(vm, parentNode) {
 
     var svg = d3.select(parentNode)
         .append('svg')
-        .attr('class', 'diagram-svg');
+        .attr('class', 'diagram-svg')
+        .attr('tabindex', 1)
+    ;
 
-    //svg.node().focus();
+    svg.node().focus();
+
 
     svg.on('mousedown', function () {
         vm.commandDeselectAll();
+        svg.node().focus();
     });
 
     svg.on('mousemove', function () {
@@ -66,10 +70,23 @@ module.exports = function(vm, parentNode) {
             vFactory(vm, this); // create new self-painting view
         });
 
-        // if (d3.event) {
-        //     d3.event.preventDefault();
-        //     d3.event.stopPropagation();
-        // }
+        d3.select(parentNode).selectAll('.element').on('mousedown', function(d) {
+            if (!vm.dragging()) {
+                if (d3.event.shiftKey){
+                    d.commandSelect();
+                } else {
+                    if (!d.selected()) {
+                        vm.commandDeselectAll();
+                        d.commandSelect();
+                    }
+                }
+            }
+
+            if (d3.event) {
+                d3.event.preventDefault();
+                d3.event.stopPropagation();
+            }
+        });
     };
 
 
