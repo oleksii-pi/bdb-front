@@ -2,7 +2,7 @@ var components = require('./components');
 
 components.register(
     'diagram',
-    require('./diagram/diagram-view-model'),
+    require('./diagram/diagram-viewmodel'),
     require('./diagram/diagram-view')
 );
 
