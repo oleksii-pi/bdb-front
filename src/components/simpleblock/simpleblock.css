@@ -1,0 +1,6 @@
+.simpleblock {
+    stroke-width: 5px;
+    stroke: lightblue;
+    fill: white;
+    pointer-events: all;
+}

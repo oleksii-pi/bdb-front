@@ -10,7 +10,8 @@ var functor = function(value) {
 module.exports = function (data) {
     var self = this;
 
-    self.component = () => data.component;
+    self.id = () => data.id; // readonly
+    self.component = () => data.component; // readonly
 
     var vms = [];
     if (data.elements) {
@@ -22,9 +23,9 @@ module.exports = function (data) {
 
     self.elements = ko.observableArray(vms);
 
-    // self.hash = ko.computed(function(){
-    //     return self.elements().map(item => item.hash());
-    // });
+    self.hash = ko.computed(function(){
+        return self.elements().map(item => item.hash());
+    });
 
     self.dragging = functor(false);
 
@@ -43,7 +44,7 @@ module.exports = function (data) {
         var id = genNewId(component);
         var vm = vmFactory({id: id, component: component, x: x, y: y});  // create ViewModel with default data
         self.commandDeselectAll();
-        vm.selected(true);
+        vm.commandSelect();
         self.elements.push(vm);
     };
 

@@ -10,8 +10,6 @@ $(document).ready(function() {
         minSize: 200
     });
 
-    var diagramDiv = $('#diagram')[0];
-    debugger;
-    compositionRoot.run(diagramDiv);
+    compositionRoot.run($('#diagram')[0]);
 });
 

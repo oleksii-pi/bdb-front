@@ -6,7 +6,7 @@ module.exports = function(vm, parentNode) {
 
     var svg = d3.select(parentNode)
         .append('svg')
-        .classed('diagram-svg', true);
+        .attr('class', 'diagram-svg');
 
     //svg.node().focus();
 
@@ -62,7 +62,7 @@ module.exports = function(vm, parentNode) {
 
         elements.exit().remove();
 
-        circle.enter().append("g").each(function(vm) {
+        elements.enter().append("g").each(function(vm) {
             vFactory(vm, this); // create new self-painting view
         });
 

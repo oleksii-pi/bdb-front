@@ -14,7 +14,7 @@ components.register(
 
 
 module.exports.run = function (parentNode) {
-    var diagramData = {component: 'diagram'};
+    var diagramData = {component: 'diagram', id: 'diagram1'};
     var vm = components.ViewModelFactory(diagramData);
     var v = components.ViewFactory(vm, parentNode);
 };
