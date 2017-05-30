@@ -10,27 +10,15 @@ module.exports = function(vm, parentNode) {
         .attr('tabindex', 1)
     ;
 
+    var svgGroup = svg.append('g');
+
     svg.node().focus();
 
     svg.on('mousedown', function () {
         vm.commandDeselectAll();
         svg.node().focus();
-    });
 
-    svg.on('mousemove', function () {
-        if (d3.event.buttons == 1) {
-            var mouse = d3.mouse(svg.node());
-            var oldMouse = vm.dragging() || mouse;
-
-            vm.commandMoveSelected(mouse[0] - oldMouse[0], mouse[1] - oldMouse[1]);
-            vm.dragging(mouse);
-        } else {
-            vm.dragging(null);
-        }
-    });
-
-    svg.on('mouseup', function () {  //!! implement according to UI state
-        if (d3.event.altKey) {
+        if (d3.event.altKey) {  //!! implement according to UI state
             var mouse = d3.mouse(svg.node());
             var x = mouse[0];
             var y = mouse[1];
@@ -80,9 +68,7 @@ module.exports = function(vm, parentNode) {
     var width = ~~svgBounds.width; // ~~ = round
     var height = ~~svgBounds.height; // ~~ = round
 
-    var container = svg.append("g").attr("class", "cage");
-
-    container.append("g")
+    svgGroup.append("g")
         .attr("class", "x axis")
         .selectAll("line")
         .data(d3.range(0, width, 10))
@@ -92,7 +78,7 @@ module.exports = function(vm, parentNode) {
         .attr("x2", function(d) { return d; })
         .attr("y2", height);
 
-    container.append("g")
+    svgGroup.append("g")
         .attr("class", "y axis")
         .selectAll("line")
         .data(d3.range(0, height, 10))
@@ -102,8 +88,15 @@ module.exports = function(vm, parentNode) {
         .attr("x2", width)
         .attr("y2", function(d) { return d; });
 
+
+    svg.call(d3.zoom()
+        .scaleExtent([0.3, 8])
+        .on("zoom", function() {
+            svgGroup.attr("transform", d3.event.transform);
+        }));
+
     function update(data) {
-        var elements = svg.selectAll('svg > g:not(.cage)').data(data, function (d) {
+        var elements = svgGroup.selectAll('svg > g:not(.axis)').data(data, function (d) {
             return d.id();
         });
 
@@ -132,7 +125,21 @@ module.exports = function(vm, parentNode) {
                     d3.event.stopPropagation();
                 }
             })
+            .call(d3.drag().on('start', dragStart).on("drag", dragged).on('end', dragEnd))
         ;
+
+        function dragStart() {
+            vm.dragging(true);
+        }
+
+        function dragged() {
+            vm.commandMoveSelected(d3.event.dx, d3.event.dy);
+        };
+
+        function dragEnd() {
+            vm.dragging(false);
+            // save
+        };
     };
 
 
