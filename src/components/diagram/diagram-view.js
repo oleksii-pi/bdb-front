@@ -12,7 +12,6 @@ module.exports = function(vm, parentNode) {
 
     svg.node().focus();
 
-
     svg.on('mousedown', function () {
         vm.commandDeselectAll();
         svg.node().focus();
@@ -33,7 +32,9 @@ module.exports = function(vm, parentNode) {
     svg.on('mouseup', function () {  //!! implement according to UI state
         if (d3.event.altKey) {
             var mouse = d3.mouse(svg.node());
-            vm.commandAdd(mouse[0], mouse[1], 'simpleblock');
+            var x = mouse[0];
+            var y = mouse[1];
+            vm.commandAdd(x, y, 'simpleblock');
         }
     });
 
@@ -45,17 +46,32 @@ module.exports = function(vm, parentNode) {
         if (d3.event.shiftKey) {
             multiplier = 1;
         }
-        if (d3.event.keyCode === 38) {
-            vm.commandMoveSelected(0, -1 * multiplier);
-        }
-        if (d3.event.keyCode === 40) {
-            vm.commandMoveSelected(0, 1 * multiplier);
-        }
-        if (d3.event.keyCode === 37) {
-            vm.commandMoveSelected(-1 * multiplier, 0);
-        }
-        if (d3.event.keyCode === 39) {
-            vm.commandMoveSelected(1 * multiplier, 0);
+        if (d3.event.altKey) {
+            if (d3.event.keyCode === 38) { //up
+                vm.commandResizeSelected(0, -1 * multiplier);
+            }
+            if (d3.event.keyCode === 40) { // down
+                vm.commandResizeSelected(0, 1 * multiplier);
+            }
+            if (d3.event.keyCode === 37) { // left
+                vm.commandResizeSelected(-1 * multiplier, 0);
+            }
+            if (d3.event.keyCode === 39) { // right
+                vm.commandResizeSelected(1 * multiplier, 0);
+            }
+        } else {
+            if (d3.event.keyCode === 38) { //up
+                vm.commandMoveSelected(0, -1 * multiplier);
+            }
+            if (d3.event.keyCode === 40) { // down
+                vm.commandMoveSelected(0, 1 * multiplier);
+            }
+            if (d3.event.keyCode === 37) { // left
+                vm.commandMoveSelected(-1 * multiplier, 0);
+            }
+            if (d3.event.keyCode === 39) { // right
+                vm.commandMoveSelected(1 * multiplier, 0);
+            }
         }
     });
 
@@ -70,23 +86,26 @@ module.exports = function(vm, parentNode) {
             vFactory(vm, this); // create new self-painting view
         });
 
-        d3.select(parentNode).selectAll('.element').on('mousedown', function(d) {
-            if (!vm.dragging()) {
-                if (d3.event.shiftKey){
-                    d.commandSelect();
-                } else {
-                    if (!d.selected()) {
-                        vm.commandDeselectAll();
+        d3.select(parentNode)
+            .selectAll('.element')
+            .on('mousedown', function(d) {
+                if (!vm.dragging()) {
+                    if (d3.event.shiftKey){
                         d.commandSelect();
+                    } else {
+                        if (!d.selected()) {
+                            vm.commandDeselectAll();
+                            d.commandSelect();
+                        }
                     }
                 }
-            }
 
-            if (d3.event) {
-                d3.event.preventDefault();
-                d3.event.stopPropagation();
-            }
-        });
+                if (d3.event) {
+                    d3.event.preventDefault();
+                    d3.event.stopPropagation();
+                }
+            })
+        ;
     };
 
 

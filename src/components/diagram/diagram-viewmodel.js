@@ -55,10 +55,19 @@ module.exports = function (data) {
     self.commandMoveSelected = function(deltaX, deltaY) {
         self.elements().forEach(item => {
             if (item.selected()) {
-            item.x(item.x() + deltaX);
-            item.y(item.y() + deltaY);
-        }
-    });
+                item.x(item.x() + deltaX);
+                item.y(item.y() + deltaY);
+            }
+        });
+    };
+
+    self.commandResizeSelected = function(deltaX, deltaY) {
+        self.elements().forEach(item => {
+            if (item.selected()) {
+                item.width(item.width() + deltaX);
+                item.height(item.height() + deltaY);
+            }
+        });
     };
 
     self.commandDeselectAll = function() {
