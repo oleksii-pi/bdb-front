@@ -7,8 +7,28 @@
 </head>
 <body>
     <div class="diagram-builder">
+
         <div id="diagram" class="split split-horizontal"></div>
-        <div id="params" class="split split-horizontal"></div>
+
+        <div id="params" class="split split-horizontal" data-bind="with:selectedElement">
+            <div>
+                <label class="elementId" data-bind="text:id"></label> (<label data-bind="text:component"></label>)
+            </div>
+
+            <div>
+                x<input data-bind="numericValue:x, valueUpdate: 'afterkeydown'"/>
+            </div>
+            <div>
+                y<input data-bind="numericValue:y, valueUpdate: 'afterkeydown'"/>
+            </div>
+            <div>
+                width<input data-bind="numericValue:width, valueUpdate: 'afterkeydown'"/>
+            </div>
+            <div>
+                height<input data-bind="numericValue:height, valueUpdate: 'afterkeydown'"/>
+            </div>
+
+        </div>
     </div>
 </body>
 </html>

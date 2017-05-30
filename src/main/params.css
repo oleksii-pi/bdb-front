@@ -1,0 +1,13 @@
+#params {
+    display: flex;
+    flex-direction: column;
+}
+
+#params .elementId {
+    font-size: 30px;
+}
+
+#params input {
+    width: 50px;
+    border: 1px solid #eee;
+}

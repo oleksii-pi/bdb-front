@@ -10,8 +10,8 @@ var functor = function(value) {
 module.exports = function (data) {
     var self = this;
 
-    self.id = () => data.id; // readonly
-    self.component = () => data.component; // readonly
+    self.id = ko.computed(() => data.id); // readonly
+    self.component = ko.computed(() => data.component); // readonly
 
     var vms = [];
     if (data.elements) {
@@ -73,4 +73,13 @@ module.exports = function (data) {
     self.commandDeselectAll = function() {
         self.elements().forEach(item => item.selected(false));
     };
+
+    self.selectedElement = ko.computed(function(){
+        var selectedCount = self.elements().filter(item => item.selected()).length;
+
+        if (selectedCount == 1) {
+            var selectedElement = self.elements().filter(item => item.selected())[0];
+            return selectedElement;
+        }
+    });
 };

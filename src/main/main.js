@@ -1,5 +1,6 @@
 require('./main.css');
 require('./split.css');
+require('./params.css');
 
 var split = require('split.js');
 var compositionRoot = require('./../components/composition-root');
