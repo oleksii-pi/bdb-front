@@ -4,10 +4,7 @@ require('./simpleblock.css');
 module.exports = function(vm, parentNode) {
     var g = d3.select(parentNode);
 
-    g.append('rect')
-        .attr("class", "element simpleblock")
-    ;
-
+    g.append('rect').attr("class", "element simpleblock");
     g.append('text');
 
     function update() {
@@ -31,7 +28,6 @@ module.exports = function(vm, parentNode) {
     update();
 
     vm.hash.subscribe(function (data) {
-        console.log('simpleblock update ' + data);
         update();
     });
 };

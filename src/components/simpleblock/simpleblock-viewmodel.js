@@ -8,11 +8,9 @@ module.exports = function (data) {
     self.component = () => data.component; // readonly
     self.x = ko.observable(data.x);
     self.y = ko.observable(data.y);
-    self.selected = ko.observable(false);
-
-    // specific:
     self.width = ko.observable(data.width || 100);
     self.height = ko.observable(data.height || 50);
+    self.selected = ko.observable(false);
 
     self.hash = ko.computed(function(){
         return [self.x(), self.y(), self.width(), self.height(), self.selected()];
