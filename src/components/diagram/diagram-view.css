@@ -6,3 +6,10 @@
 g > .selected {
     stroke: #ff9900;
 }
+
+.axis line {
+    fill: none;
+    stroke: #eee;
+    shape-rendering: crispEdges;
+    vector-effect: non-scaling-stroke;
+}

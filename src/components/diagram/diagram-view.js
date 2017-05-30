@@ -75,8 +75,35 @@ module.exports = function(vm, parentNode) {
         }
     });
 
+
+    var svgBounds = svg.node().getBoundingClientRect();
+    var width = ~~svgBounds.width; // ~~ = round
+    var height = ~~svgBounds.height; // ~~ = round
+
+    var container = svg.append("g").attr("class", "cage");
+
+    container.append("g")
+        .attr("class", "x axis")
+        .selectAll("line")
+        .data(d3.range(0, width, 10))
+        .enter().append("line")
+        .attr("x1", function(d) { return d; })
+        .attr("y1", 0)
+        .attr("x2", function(d) { return d; })
+        .attr("y2", height);
+
+    container.append("g")
+        .attr("class", "y axis")
+        .selectAll("line")
+        .data(d3.range(0, height, 10))
+        .enter().append("line")
+        .attr("x1", 0)
+        .attr("y1", function(d) { return d; })
+        .attr("x2", width)
+        .attr("y2", function(d) { return d; });
+
     function update(data) {
-        var elements = svg.selectAll('g').data(data, function (d) {
+        var elements = svg.selectAll('svg > g:not(.cage)').data(data, function (d) {
             return d.id();
         });
 
