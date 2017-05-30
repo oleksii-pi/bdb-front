@@ -1,0 +1,15 @@
+.textbox {
+    stroke-width: 1px;
+    stroke: lightgray;
+    fill: transparent;
+    pointer-events: all;
+}
+
+foreignObject {
+    overflow: hidden;
+    pointer-events: none;
+}
+
+foreignObject > div {
+    word-wrap: break-word;
+}
