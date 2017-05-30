@@ -96,10 +96,9 @@ module.exports = function(vm, parentNode) {
         }));
 
     function update(data) {
-        var elements = svgGroup.selectAll('svg > g:not(.axis)').data(data, function (d) {
+        var elements = svgGroup.selectAll('g:not(.axis)').data(data, function (d) {
             return d.id();
         });
-
         elements.exit().remove();
 
         elements.enter().append("g").each(function(vm) {
