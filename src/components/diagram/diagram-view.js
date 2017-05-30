@@ -19,7 +19,7 @@ module.exports = function(vm, parentNode) {
         svg.node().focus();
 
         if (d3.event.altKey) {  //!! implement according to UI state
-            var mouse = d3.mouse(svg.node());
+            var mouse = d3.mouse(svg.select('g').node());
             var x = mouse[0];
             var y = mouse[1];
             vm.commandAdd(x, y, 'simpleblock');
