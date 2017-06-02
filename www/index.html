@@ -11,8 +11,9 @@
         <div id="diagram" class="split split-horizontal"></div>
 
         <div id="params" class="split split-horizontal" data-bind="with:selectedElement">
-            <div>
-                <label class="elementId" data-bind="text:id"></label> (<label data-bind="text:component"></label>)
+            <div class="horizontal">
+                <input class="elementId" data-bind="stringValue: id, valueUpdate: 'afterkeydown'"></input>
+                <label class="elementComponent" data-bind="text:component"></label>
             </div>
 
             <table>

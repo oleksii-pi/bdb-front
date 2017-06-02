@@ -3,11 +3,23 @@
     flex-direction: column;
 }
 
-#params .elementId {
-    font-size: 30px;
-    padding: 4px;
+#params div.horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
+#params .elementId {
+    font-size: 24px;
+    padding: 4px;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+}
+
+#params .elementComponent {
+    padding: 0 12px 0 0;
+    color: #aaa;
+}
 /*#params input {*/
     /*width: 50px;*/
     /*border: 1px solid #eee;*/
