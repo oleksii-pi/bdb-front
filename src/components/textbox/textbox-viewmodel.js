@@ -14,10 +14,12 @@ module.exports = function (data) {
 
     self.text = ko.observable(data.text || data.id).extend({dataType: "string"});
 
+    // need for repainting diagram view according to actual values
     self.hash = ko.computed(function(){
         return [self.x(), self.y(), self.width(), self.height(), self.selected(), self.text()];
     });
 
+    // need for diagram designer params view
     self.params = [self.text, self.x, self.y, self.width, self.height];
 
     self.commandSelect = function() {
