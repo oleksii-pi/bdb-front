@@ -5,9 +5,45 @@
 
 #params .elementId {
     font-size: 30px;
+    padding: 4px;
 }
 
+/*#params input {*/
+    /*width: 50px;*/
+    /*border: 1px solid #eee;*/
+/*}*/
+
+
 #params input {
-    width: 50px;
-    border: 1px solid #eee;
+    margin: 0;
+    padding: 4px;
+    width: 100%;
+    border: 0;
+
+}
+
+#params textarea {
+    margin: 0;
+    padding: 4px;
+    width: 100%;
+    border: 0;
+    max-height: 100px;
+}
+
+#params table {
+    border-collapse: collapse;
+    width: 100%;
+    border-style: hidden;
+}
+
+#params td {
+    border: 1px solid #ddd;
+
+}
+
+#params td:nth-child(1) {
+    color: orange;
+    text-align: right;
+    padding: 4px;
+    width: 20px;
 }

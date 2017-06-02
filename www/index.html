@@ -15,18 +15,34 @@
                 <label class="elementId" data-bind="text:id"></label> (<label data-bind="text:component"></label>)
             </div>
 
-            <div>
-                x<input data-bind="numericValue:x, valueUpdate: 'afterkeydown'"/>
-            </div>
-            <div>
-                y<input data-bind="numericValue:y, valueUpdate: 'afterkeydown'"/>
-            </div>
-            <div>
-                width<input data-bind="numericValue:width, valueUpdate: 'afterkeydown'"/>
-            </div>
-            <div>
-                height<input data-bind="numericValue:height, valueUpdate: 'afterkeydown'"/>
-            </div>
+            <table>
+                <tbody data-bind="foreach: params">
+                <tr>
+                    <td data-bind="text: Object.keys($parent)[ Object.values($parent).indexOf($rawData)]" />
+                    <td>
+                        <div data-bind="if: typeof $rawData.dataType === 'undefined', visible: typeof $rawData.dataType === 'undefined'">
+                            <textArea data-bind="stringValue: $rawData, valueUpdate: 'afterkeydown'"></textArea>
+                        </div>
+
+                        <div data-bind="if: $rawData.dataType == 'string', visible: $rawData.dataType == 'string'">
+                            <textArea data-bind="stringValue: $rawData, valueUpdate: 'afterkeydown'"></textArea>
+                        </div>
+
+                        <div data-bind="if: $rawData.dataType == 'integer', visible: $rawData.dataType == 'integer'">
+                            <input data-bind="integerValue: $rawData, valueUpdate: 'afterkeydown'" />
+                        </div>
+
+                        <div data-bind="if: $rawData.dataType == 'float', visible: $rawData.dataType == 'float'">
+                            <input data-bind="floatValue: $context.$rawData" />
+                        </div>
+
+                        <div data-bind="if: $rawData.dataType == 'boolean', visible: $rawData.dataType == 'boolean'">
+                            <input type="checkbox" data-bind="checked: $rawData" />
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
     </div>
