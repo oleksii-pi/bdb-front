@@ -29,7 +29,7 @@
                         </div>
 
                         <div data-bind="if: $rawData.dataType == 'integer', visible: $rawData.dataType == 'integer'">
-                            <input data-bind="integerValue: $rawData, valueUpdate: 'afterkeydown'" />
+                            <input data-bind="integerValue: $rawData" />
                         </div>
 
                         <div data-bind="if: $rawData.dataType == 'float', visible: $rawData.dataType == 'float'">
