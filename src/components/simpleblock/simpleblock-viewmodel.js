@@ -16,6 +16,8 @@ module.exports = function (data) {
         return [self.x(), self.y(), self.width(), self.height(), self.selected()];
     });
 
+    self.params = [self.x, self.y, self.width, self.height];
+
     self.commandSelect = function() {
         self.selected(!self.selected());
     };
