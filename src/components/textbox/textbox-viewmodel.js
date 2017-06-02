@@ -19,7 +19,7 @@ module.exports = function (data) {
         return [self.x(), self.y(), self.width(), self.height(), self.selected(), self.text()];
     });
 
-    // need for diagram designer params view
+    // need for diagram designer params view. all params have to have dataType
     self.params = [self.text, self.x, self.y, self.width, self.height];
 
     self.commandSelect = function() {
