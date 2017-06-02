@@ -7,7 +7,6 @@ module.exports = function(vm, parentNode) {
     var g = d3.select(parentNode);
 
     g.append('rect').attr("class", "element textbox");
-    g.append('text');
     g.append("foreignObject");
 
     function update() {
@@ -25,7 +24,7 @@ module.exports = function(vm, parentNode) {
             .attr('y', d => d.y() + margin)
             .attr('width', d => d.width() - margin * 2)
             .attr('height', d => d.height() - margin * 2)
-            .html(d => '<div>' + d.text() + '</div>');
+            .html(d => '<pre>' + d.text() + '</pre>');
 
     };
 
