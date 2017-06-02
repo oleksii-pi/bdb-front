@@ -10,8 +10,13 @@ var functor = function(value) {
 module.exports = function (data) {
     var self = this;
 
-    self.id = ko.computed(() => data.id); // readonly
+    self.id = ko.observable(data.id);
     self.component = ko.computed(() => data.component); // readonly
+    self.maxThreadCount = ko.observable(data.maxThreadCount || 100).extend({dataType: "integer", range: {min: 1, max: 500}});
+
+    self.params = [self.maxThreadCount];
+
+
 
     var vms = [];
     if (data.elements) {
@@ -76,6 +81,10 @@ module.exports = function (data) {
 
     self.selectedElement = ko.computed(function(){
         var selectedCount = self.elements().filter(item => item.selected()).length;
+
+        if (selectedCount == 0) {
+            return self;
+        }
 
         if (selectedCount == 1) {
             var selectedElement = self.elements().filter(item => item.selected())[0];
