@@ -10,13 +10,17 @@ var functor = function(value) {
 module.exports = function (data) {
     var self = this;
 
+    // designer
+
     self.id = ko.observable(data.id);
     self.component = ko.computed(() => data.component); // readonly
     self.maxThreadCount = ko.observable(data.maxThreadCount || 100).extend({dataType: "integer", range: {min: 1, max: 500}});
 
     self.params = [self.maxThreadCount];
 
+    //
 
+    self.showParams = ko.observable(true);
 
     var vms = [];
     if (data.elements) {

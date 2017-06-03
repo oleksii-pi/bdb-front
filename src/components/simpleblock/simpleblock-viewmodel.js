@@ -11,7 +11,8 @@ module.exports = function (data) {
     self.width = ko.observable(data.width || 100).extend({dataType: "integer", range: {min: 100, max: 500}});
     self.height = ko.observable(data.height || 50).extend({dataType: "integer", range: {min: 50, max: 500}});
     self.selected = ko.observable(false);
-    self.singleton = ko.observable(false).extend({dataType: "boolean"});;
+    self.singleton = ko.observable(data.singleton).extend({dataType: "boolean"});
+    self.func = ko.observable(data.func);
 
     self.hash = ko.computed(function(){
         return [self.id(), self.x(), self.y(), self.width(), self.height(), self.selected()];

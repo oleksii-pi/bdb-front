@@ -13,10 +13,13 @@
         <div id="params" class="split split-horizontal" data-bind="with:selectedElement">
             <div class="horizontal">
                 <input class="elementId" data-bind="value: id, valueUpdate: 'afterkeydown'" />
-                <label class="elementComponent" data-bind="text:component"></label>
+                <div class="vertical">
+                    <label class="elementComponent" data-bind="text:component"></label>
+                    <label class="showParams"><input type="checkbox" data-bind="checked: $parent.showParams" /> params</label>
+                </div>
             </div>
 
-            <table>
+            <table data-bind="visible: $parent.showParams">
                 <tbody data-bind="foreach: params">
                 <tr>
                     <td data-bind="text: Object.keys($parent)[ Object.values($parent).indexOf($rawData)]" />
@@ -44,6 +47,7 @@
                 </tr>
                 </tbody>
             </table>
+
 
         </div>
     </div>
