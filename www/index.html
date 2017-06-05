@@ -46,22 +46,12 @@
                 </tbody>
             </table>
 
-            <div id="codeEditorDiv" data-bind="visible: $parent.showCodeEditor" >
-                <textarea id="codeEditor" >
-    //test
-
-    var editor = CodeMirror.fromTextArea($('#codeEditor')[0], {
-      mode: "javascript",
-      theme: "default",
-      matchBrackets:true,
-      //lineNumbers: true
-    });
-                </textarea>
+            <div id="codeEditorDiv" data-bind="if: typeof ($data.code) !== 'undefined'" >
+                <textarea id="codeEditor" data-bind="value: code, codemirror: {mode: 'javascript', theme: 'default', matchBrackets:true, lineNumbers: false}">// block javascript code</textarea>
             </div>
 
             <div id="paramsFooter" class="horizontal">
                 <label><input type="checkbox" data-bind="checked: $parent.showParams" /> params</label>
-                <label><input type="checkbox" data-bind="checked: $parent.showCodeEditor" /> code editor</label>
             </div>
         </div>
     </div>
