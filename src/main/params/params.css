@@ -79,4 +79,5 @@
 
 #codeEditorDiv {
     border: 1px solid #ddd;
+    flex-grow: 1;
 }
