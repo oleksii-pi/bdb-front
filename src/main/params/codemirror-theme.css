@@ -1,7 +1,7 @@
 .CodeMirror.cm-s-default {
     background: white;
     height: 100%;
-    min-height: 200px;
+    min-height: 50px;
 }
 
 .cm-tab {

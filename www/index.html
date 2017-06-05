@@ -18,7 +18,7 @@
             </div>
 
             <table id="paramsTable" data-bind="visible: $parent.showParams">
-                <tbody data-bind="foreach: params">
+                <tbody data-bind="foreach: blockParams">
                 <tr>
                     <td data-bind="text: Object.keys($parent)[ Object.values($parent).indexOf($rawData)]" />
                     <td>
@@ -35,11 +35,15 @@
                         </div>
 
                         <div data-bind="if: $rawData.dataType == 'float', visible: $rawData.dataType == 'float'">
-                            <input data-bind="floatValue: $context.$rawData" />
+                            <input data-bind="floatValue: $rawData" />
                         </div>
 
                         <div data-bind="if: $rawData.dataType == 'boolean', visible: $rawData.dataType == 'boolean'">
                             <input type="checkbox" data-bind="checked: $rawData" />
+                        </div>
+
+                        <div data-bind="if: $rawData.dataType == 'json', visible: $rawData.dataType == 'json'">
+                            <textarea data-bind="value: $rawData, codemirror: {mode: 'application/json', theme: 'default', matchBrackets:true, lineNumbers: false}"></textarea>
                         </div>
                     </td>
                 </tr>
@@ -47,7 +51,7 @@
             </table>
 
             <div id="codeEditorDiv" data-bind="if: typeof ($data.code) !== 'undefined'" >
-                <textarea id="codeEditor" data-bind="value: code, codemirror: {mode: 'javascript', theme: 'default', matchBrackets:true, lineNumbers: false}">// block javascript code</textarea>
+                <textarea id="codeEditor" data-bind="value: code, codemirror: {mode: 'javascript', theme: 'default', matchBrackets:true, lineNumbers: false}">// block js</textarea>
             </div>
 
             <div id="paramsFooter" class="horizontal">

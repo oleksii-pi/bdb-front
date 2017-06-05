@@ -16,7 +16,7 @@ module.exports = function (data) {
     self.component = ko.computed(() => data.component); // readonly
     self.maxThreadCount = ko.observable(data.maxThreadCount || 100).extend({dataType: "integer", range: {min: 1, max: 500}});
 
-    self.params = [self.maxThreadCount];
+    self.blockParams = [self.maxThreadCount];
 
     //
 

@@ -20,7 +20,7 @@ module.exports = function (data) {
     });
 
     // need for diagram designer params view. all params have to have dataType
-    self.params = [self.text, self.x, self.y, self.width, self.height];
+    self.blockParams = [self.text, self.x, self.y, self.width, self.height];
 
     self.commandSelect = function() {
         self.selected(!self.selected());
