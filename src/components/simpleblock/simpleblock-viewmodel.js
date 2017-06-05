@@ -12,7 +12,7 @@ module.exports = function (data) {
     self.height = ko.observable(data.height || 50).extend({dataType: "integer", range: {min: 50, max: 500}});
     self.selected = ko.observable(false);
     self.singleton = ko.observable(data.singleton).extend({dataType: "boolean"});
-    self.func = ko.observable(data.func);
+    self.code = ko.observable(data.code || '// block code');
 
     self.hash = ko.computed(function(){
         return [self.id(), self.x(), self.y(), self.width(), self.height(), self.selected()];
