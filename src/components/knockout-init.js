@@ -15,7 +15,38 @@ ko.extenders.logChange = function(target, option) {
 
 ko.extenders.dataType = function(target, option) {
     target.dataType = option;
-    return target;
+    if (target.dataType == 'integer') {
+        var result = createIntegerInterceptor(target);
+        result.dataType = target.dataType;
+        return result;
+    } else {
+        return target;
+    }
+};
+
+// https://gist.github.com/hereswhatidid/8205263
+var createIntegerInterceptor = function (target) {
+    var result = ko.computed({
+        read: target,  //always return the original observables value
+        write: function (newValue) {
+            var current = target(),
+                newValueAsInteger = isNaN(newValue) ? 0 : parseInt(+newValue, 10);
+
+            //only write if it changed
+            if (newValueAsInteger !== current) {
+                target(newValueAsInteger);
+            } else {
+                //if the tested value is the same, but a different value was written, force a notification for the current field
+                if (newValue !== current) {
+                    target.notifySubscribers(newValueAsInteger);
+                }
+            }
+        }
+    }).extend({notify: 'always'});
+
+    //initialize with current value to make sure it is rounded appropriately
+    result(target());
+    return result;
 };
 
 ko.extenders.range = function(target, paramRange) {
