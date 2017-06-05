@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Block Diagram Builder</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
     <script type="text/javascript" src="assets/bundle.js" charset="utf-8"></script>
 </head>
 <body>
@@ -10,16 +11,13 @@
 
         <div id="diagram" class="split split-horizontal"></div>
 
-        <div id="params" class="split split-horizontal" data-bind="with:selectedElement">
+        <div id="params" class="split split-horizontal vertical" data-bind="with:selectedElement">
             <div class="horizontal">
                 <input class="elementId" data-bind="value: id, valueUpdate: 'afterkeydown'" />
-                <div class="vertical">
-                    <label class="elementComponent" data-bind="text:component"></label>
-                    <label class="showParams"><input type="checkbox" data-bind="checked: $parent.showParams" /> params</label>
-                </div>
+                <label class="elementComponent" data-bind="text:component"></label>
             </div>
 
-            <table data-bind="visible: $parent.showParams">
+            <table id="paramsTable" data-bind="visible: $parent.showParams">
                 <tbody data-bind="foreach: params">
                 <tr>
                     <td data-bind="text: Object.keys($parent)[ Object.values($parent).indexOf($rawData)]" />
@@ -48,7 +46,23 @@
                 </tbody>
             </table>
 
+            <div id="codeEditorDiv" data-bind="visible: $parent.showCodeEditor" >
+                <textarea id="codeEditor" >
+    //test
 
+    var editor = CodeMirror.fromTextArea($('#codeEditor')[0], {
+      mode: "javascript",
+      theme: "default",
+      matchBrackets:true,
+      //lineNumbers: true
+    });
+                </textarea>
+            </div>
+
+            <div id="paramsFooter" class="horizontal">
+                <label><input type="checkbox" data-bind="checked: $parent.showParams" /> params</label>
+                <label><input type="checkbox" data-bind="checked: $parent.showCodeEditor" /> code editor</label>
+            </div>
         </div>
     </div>
 </body>

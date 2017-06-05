@@ -21,6 +21,7 @@ module.exports = function (data) {
     //
 
     self.showParams = ko.observable(true);
+    self.showCodeEditor = ko.observable(true);
 
     var vms = [];
     if (data.elements) {

@@ -1,32 +1,31 @@
 #params {
-    display: flex;
-    flex-direction: column;
-    padding-right: 15px;
+    padding-right: 4px;
+    background: whitesmoke;
 }
 
 #params div.horizontal {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
 }
 
-#params div.vertical {
+#params div.vertical, #params {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
 }
 
-#params .elementId {
+#params input.elementId {
+    margin: 0;
     font-size: 24px;
     padding: 4px;
+    border: 0;
     border-bottom: 1px solid #ddd;
     width: 100%;
 }
 
 #params .elementComponent {
     color: #aaa;
+    background: white;
+    padding: 0 4px;
 }
 /*#params input {*/
     /*width: 50px;*/
@@ -34,7 +33,7 @@
 /*}*/
 
 
-#params input {
+#paramsTable input {
     margin: 0;
     padding: 4px;
     width: 100%;
@@ -42,7 +41,7 @@
 
 }
 
-#params textarea {
+#paramsTable textarea {
     margin: 0;
     padding: 4px;
     width: 100%;
@@ -50,31 +49,34 @@
     max-height: 100px;
 }
 
-#params table {
+#paramsTable {
     border-collapse: collapse;
     width: 100%;
     border-style: hidden;
 }
 
-#params td {
+#paramsTable td {
     border: 1px solid #ddd;
 
 }
 
-#params td:nth-child(1) {
+#paramsTable td:nth-child(1) {
     color: orange;
     text-align: right;
     padding: 4px;
     width: 20px;
 }
 
-#params .showParams {
-    display: block;
-    color: #777;
-    padding-left: 20px;
-    text-indent: -20px;
+#paramsTable td:nth-child(2) {
+    background: white;
 }
 
-#params .showParams > input {
-    width:auto;
+#paramsFooter {
+    align-self: flex-end;
+     width: 100%;
+     height: auto;
+ }
+
+#codeEditorDiv {
+    border: 1px solid #ddd;
 }
