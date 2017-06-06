@@ -1,33 +1,38 @@
-.block {
+.block  {
     stroke-width: 3px;
     stroke: lightblue;
     fill: white;
     pointer-events: all;
 }
 
-.block + foreignObject {
+.block .resizeRect{
+    stroke: orange;
+    fill: orange;
+}
+
+.block foreignObject {
     overflow: hidden;
     pointer-events: none;
 }
 
-.block + foreignObject table {
+.block foreignObject table {
     width: 100%;
     border-style: hidden;
 }
 
 
-.block + foreignObject .elementTitle {
+.block foreignObject .elementTitle {
     font-size: 20px;
     text-align: center;
 }
 
-.block + foreignObject td {
+.block foreignObject td {
     border: 1px solid #ddd;
     padding: 4px;
 }
 
 
-.block + foreignObject td:nth-child(1) {
+.block foreignObject td:nth-child(1) {
     color: orange;
     text-align: right;
     padding: 4px;
