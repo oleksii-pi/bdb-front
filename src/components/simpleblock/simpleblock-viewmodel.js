@@ -11,6 +11,6 @@ module.exports = function (data) {
     self.params = ko.observable(data.params).extend({dataType: "json"});
     self.code = ko.observable(data.code || '// block code');
 
-    self.addViewChangers(self.params); // if need
+    //self.addViewChangers(); // if need
     self.blockParams.push(self.singleton, self.params);
 };

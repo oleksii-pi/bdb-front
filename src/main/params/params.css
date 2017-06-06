@@ -13,6 +13,10 @@
     flex-direction: column;
 }
 
+#params .elementIdDiv {
+    min-height: 40px;
+}
+
 #params input.elementId {
     margin: 0;
     font-size: 24px;
