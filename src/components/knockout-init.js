@@ -216,6 +216,20 @@ ko.bindingHandlers.floatValue = {
         $(element).on("keydown", function (event) {
             var key = event.keyCode;
 
+            var value = ko.unwrap(valueAccessor());
+            var floatValue = parseFloat(value);
+
+            // up
+            if (key == 38) {
+                valueAccessor()(floatValue + 1);
+                return;
+            }
+            // down
+            if (key == 40) {
+                valueAccessor()(floatValue - 1);
+                return;
+            }
+
             // Allow: backspace, delete, tab, escape, and enter
             if (key == 46 || key == 8 || key == 9 || key == 27 || key == 13 || key == 189 ||
                 // Allow: Ctrl/Command + A, C, V, X, Z
