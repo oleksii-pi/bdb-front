@@ -7,7 +7,7 @@ module.exports = function (component, data) {
     self.component = ko.computed(() => data.component); // readonly
     self.x = ko.observable(data.x).extend({dataType: "float", precision: 2});
     self.y = ko.observable(data.y).extend({dataType: "float", precision: 2});
-    self.width = ko.observable(data.width || 100).extend({dataType: "float", precision: 2, range: {min: 100, max: 500}});
+    self.width = ko.observable(data.width || 50).extend({dataType: "float", precision: 2, range: {min: 50, max: 500}});
     self.height = ko.observable(data.height || 50).extend({dataType: "float", precision: 2, range: {min: 50, max: 500}});
     self.selected = ko.observable(false);
 
@@ -15,6 +15,7 @@ module.exports = function (component, data) {
         self.selected(!self.selected());
     };
 
+    // designer params:
     self.blockParams = [self.x, self.y, self.width, self.height];
 
     var _viewChangers = [];
@@ -24,5 +25,7 @@ module.exports = function (component, data) {
         }
         self.hash = ko.pureComputed(() => _viewChangers.map(item => item()));
     };
+
+    // add observables that affects view render:
     self.addViewChangers(self.id, self.x, self.y, self.width, self.height, self.selected);
 }
