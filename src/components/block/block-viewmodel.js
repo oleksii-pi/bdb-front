@@ -11,8 +11,9 @@ module.exports = function (data) {
     self.singleton = ko.observable(data.singleton).extend({dataType: "boolean"});
     self.params = ko.observable(data.params || '').extend({dataType: "javascript"});
     self.code = ko.observable(data.code || '// block code');
+    self.out = ko.observable(data.out || '').extend({dataType: "string"});
 
-    self.paramsView = ko.computed(() => {
+    self.paramsViewModel = ko.computed(() => {
         try {
             var params = self.params();
             var keyValueArray = params
@@ -25,9 +26,12 @@ module.exports = function (data) {
         } catch (e) {
             return;
         }
-
     });
 
-    self.addViewChangers(self.singleton, self.params);
-    self.blockParams.push(self.singleton, self.params);
+    self.outLinksViewModel = ko.computed(() => {
+        return self.out().split(',').map(item => item.trim()).filter(item => item != '');
+    });
+
+    self.addViewChangers(self.singleton, self.params, self.out);
+    self.blockParams.push(self.singleton, self.params, self.out);
 };

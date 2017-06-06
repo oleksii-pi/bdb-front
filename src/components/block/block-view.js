@@ -4,12 +4,17 @@ var ko = require('knockout');
 
 const margin = 4;
 const resizeRectSize = 5;
+const linkRadius = 6;
 
 module.exports = function(vm, parentNode) {
     var g = d3.select(parentNode);
 
     g.attr("class", "element block");
 
+    g.append('circle')
+        .attr("class", "linkIn")
+        .attr("r", linkRadius)
+    ;
     g.append('rect');
     g.append('foreignObject');
     g.append('rect')
@@ -23,7 +28,7 @@ module.exports = function(vm, parentNode) {
 `<div class="elementTitle" data-bind="text: id"></div>
 <label><input type="checkbox" data-bind="checked: singleton" /> singleton</label>
 <table >
-    <tbody data-bind="foreach: paramsView">
+    <tbody data-bind="foreach: paramsViewModel">
     <tr>
         <td data-bind="text: $rawData.key" />
         <td data-bind="text: $rawData.value" />
@@ -36,6 +41,11 @@ module.exports = function(vm, parentNode) {
     });
 
     function update() {
+
+        g.select('.linkIn')
+            .attr('cx', vm.x() + vm.width() / 2)
+            .attr('cy', vm.y() - linkRadius)
+        ;
 
         g.select('rect')
             .attr('x', vm.x())
@@ -62,6 +72,29 @@ module.exports = function(vm, parentNode) {
                 vm.height(d3.event.y - vm.y());
             }))
         ;
+
+        var outLinksCount = vm.outLinksViewModel().length;
+        var sectionLength = vm.width() / outLinksCount;
+
+        var outLinks = g.selectAll('.linkOut')
+            .data(vm.outLinksViewModel());
+        outLinks.exit().remove();
+
+        outLinks
+            .enter()
+            .append('circle')
+            .attr('class', 'linkOut')
+            .attr('r', linkRadius)
+            .merge(outLinks)
+            .each(function(data, index) {
+                var cx = vm.x() + index * sectionLength + sectionLength / 2;
+                var cy = vm.y() + vm.height() + linkRadius;
+                d3.select(this)
+                    .attr("cx", cx)
+                    .attr("cy", cy);
+
+            });
+
 
     };
 
