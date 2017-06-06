@@ -1,9 +1,8 @@
 var ko = require('knockout');
-var vmFactory = require('./../components').ViewModelFactory;
 var inheritBaseComponent = require('./../base-component');
 
 module.exports = function (data) {
-    data.width = data.width || 200;
+    data.width = data.width || 200;  // default while create new
     data.height = data.height || 150;
     inheritBaseComponent(this, data);
 

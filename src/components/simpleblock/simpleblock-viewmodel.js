@@ -1,5 +1,4 @@
 var ko = require('knockout');
-var vmFactory = require('./../components').ViewModelFactory;
 var inheritBaseComponent = require('./../base-component');
 
 module.exports = function (data) {
