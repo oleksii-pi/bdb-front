@@ -12,11 +12,12 @@ module.exports = function(vm, parentNode) {
 
     var svgGroup = svg.append('g');
 
-    svg.node().focus();
+    var focusDiagram = () => svg.node().focus();
+    focusDiagram();
 
     svg.on('mousedown', function () {
         vm.commandDeselectAll();
-        svg.node().focus();
+        focusDiagram();
 
         if (d3.event.altKey) {  //!! implement according to UI state
             var mouse = d3.mouse(svg.select('g').node());
@@ -118,6 +119,7 @@ module.exports = function(vm, parentNode) {
                         }
                     }
                 }
+                focusDiagram();
 
                 if (d3.event) {
                     d3.event.preventDefault();
