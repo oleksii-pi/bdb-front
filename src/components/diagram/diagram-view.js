@@ -97,7 +97,7 @@ module.exports = function(vm, parentNode) {
         }));
 
     function update(data) {
-        var elements = svgGroup.selectAll('g:not(.axis)').data(data, function (d) {
+        var elements = svgGroup.selectAll('.element').data(data, function (d) {
             return d.id();
         });
         elements.exit().remove();
@@ -118,7 +118,7 @@ module.exports = function(vm, parentNode) {
                             d.commandSelect();
                         }
                     }
-                }
+                };
                 focusDiagram();
 
                 if (d3.event) {

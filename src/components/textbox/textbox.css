@@ -5,12 +5,12 @@
     pointer-events: all;
 }
 
-.textbox + foreignObject {
+.textbox foreignObject {
     overflow: hidden;
     pointer-events: none;
 }
 
-.textbox + foreignObject > pre {
+.textbox foreignObject > pre {
     margin: 0;
     padding: 0;
     width: 100%;

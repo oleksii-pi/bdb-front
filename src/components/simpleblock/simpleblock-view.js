@@ -3,8 +3,9 @@ require('./simpleblock.css');
 
 module.exports = function(vm, parentNode) {
     var g = d3.select(parentNode);
+    g.attr("class", "element simpleblock");
 
-    g.append('rect').attr("class", "element simpleblock");
+    g.append('rect');
     g.append('text');
 
     function update() {

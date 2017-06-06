@@ -8,6 +8,7 @@ module.exports = function (data) {
 
     var self = this;
 
+    self.title = ko.observable(data.title || data.id).extend({dataType: "string"});
     self.singleton = ko.observable(data.singleton).extend({dataType: "boolean"});
     self.params = ko.observable(data.params || '').extend({dataType: "javascript"});
     self.code = ko.observable(data.code || '// block code');
@@ -32,6 +33,7 @@ module.exports = function (data) {
         return self.out().split(',').map(item => item.trim()).filter(item => item != '');
     });
 
-    self.addViewChangers(self.singleton, self.params, self.out);
+    self.addViewChangers(self.title, self.singleton, self.params, self.out);
+    self.blockParams.splice(0, 0, self.title);
     self.blockParams.push(self.singleton, self.params, self.out);
 };

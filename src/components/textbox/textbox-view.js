@@ -5,8 +5,9 @@ const margin = 4;
 
 module.exports = function(vm, parentNode) {
     var g = d3.select(parentNode);
+    g.attr("class", "element textbox");
 
-    g.append('rect').attr("class", "element textbox");
+    g.append('rect');
     g.append("foreignObject");
 
     function update() {

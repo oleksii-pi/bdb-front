@@ -25,8 +25,8 @@ module.exports = function(vm, parentNode) {
 
     g.select('foreignObject')
         .html(d =>
-`<div class="elementTitle" data-bind="text: id"></div>
-<label><input type="checkbox" data-bind="checked: singleton" /> singleton</label>
+`<div class="elementTitle" data-bind="text: title"></div>
+<div class="singleton" data-bind="visible: singleton">singleton</div>
 <table >
     <tbody data-bind="foreach: paramsViewModel">
     <tr>
@@ -76,26 +76,42 @@ module.exports = function(vm, parentNode) {
         var outLinksCount = vm.outLinksViewModel().length;
         var sectionLength = vm.width() / outLinksCount;
 
-        var outLinks = g.selectAll('.linkOut')
+        var outLinks = g.selectAll('g.linkOut')
             .data(vm.outLinksViewModel());
         outLinks.exit().remove();
 
-        outLinks
+        var outLinkGroups = outLinks
             .enter()
-            .append('circle')
-            .attr('class', 'linkOut')
-            .attr('r', linkRadius)
-            .merge(outLinks)
+            .append('g')
+            .attr('class', 'linkOut');
+
+        outLinkGroups.append('circle')
+            .attr('r', linkRadius);
+
+        outLinkGroups.append('text');
+
+        //outLinks = outLinks.enter().merge(outLinks);
+
+        outLinks.select('circle')
             .each(function(data, index) {
                 var cx = vm.x() + index * sectionLength + sectionLength / 2;
                 var cy = vm.y() + vm.height() + linkRadius;
                 d3.select(this)
                     .attr("cx", cx)
                     .attr("cy", cy);
-
             });
 
-
+        outLinks.select('text')
+            .each(function(data, index) {
+                console.log(data, index);
+                var cx = vm.x() + index * sectionLength + sectionLength / 2;
+                var cy = vm.y() + vm.height() - linkRadius;
+                d3.select(this)
+                    .attr("x", cx)
+                    .attr("y", cy)
+                    .html(data)
+                ;
+            });
     };
 
     update();
