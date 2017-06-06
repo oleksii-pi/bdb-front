@@ -14,14 +14,20 @@ module.exports = function (data) {
 
     self.paramsView = ko.computed(() => {
         try {
-            var json = JSON.parse(self.params());
+            var params = self.params();
+            var keyValueArray = params
+                .split(';')
+                .filter(item => item.indexOf('=') != -1)
+                .map(item => {
+                return {key: item.split('=')[0].trim(), value: item.split('=')[1].trim()} ;
+            });
+            return keyValueArray;
         } catch (e) {
             return;
         }
-        var keyValueArray = Object.keys(json).map(function(key) { return {key: key, value: json[key]} });
-        return keyValueArray;
+
     });
 
-    self.addViewChangers(self.params);
+    self.addViewChangers(self.singleton, self.params);
     self.blockParams.push(self.singleton, self.params);
 };

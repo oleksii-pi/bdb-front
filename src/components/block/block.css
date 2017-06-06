@@ -23,6 +23,7 @@
 
 .block + foreignObject td {
     border: 1px solid #ddd;
+    padding: 4px;
 }
 
 
@@ -30,5 +31,5 @@
     color: orange;
     text-align: right;
     padding: 4px;
-    
+    width: 20px;
 }

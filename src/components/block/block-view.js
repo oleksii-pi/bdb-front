@@ -12,14 +12,15 @@ module.exports = function(vm, parentNode) {
 
     g.select('foreignObject')
         .html(d =>
-        '<div class="elementTitle" data-bind="text: id"></div>' +
-        `<table >
-                    <tbody data-bind="foreach: paramsView">
-                    <tr>
-                        <td data-bind="text: $rawData.key" />
-                        <td data-bind="text: $rawData.value" />
-                    </tr>
-                </table>`
+`<div class="elementTitle" data-bind="text: id"></div>
+<label><input type="checkbox" data-bind="checked: singleton" /> singleton</label>
+<table >
+    <tbody data-bind="foreach: paramsView">
+    <tr>
+        <td data-bind="text: $rawData.key" />
+        <td data-bind="text: $rawData.value" />
+    </tr>
+</table>`
     ).each(function (d) {
         //var bindingsApplied = !!ko.dataFor(this);
         //ko.cleanNode(this);
