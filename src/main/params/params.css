@@ -40,7 +40,6 @@
 #paramsTable input {
     margin: 0;
     padding: 4px;
-    width: 100%;
     border: 0;
 
 }
@@ -48,7 +47,6 @@
 #paramsTable textarea {
     margin: 0;
     padding: 4px;
-    width: 100%;
     border: 0;
     max-height: 100px;
 }
@@ -61,7 +59,10 @@
 
 #paramsTable td {
     border: 1px solid #ddd;
+}
 
+#paramsTable td * {
+    width: 100%;
 }
 
 #paramsTable td:nth-child(1) {

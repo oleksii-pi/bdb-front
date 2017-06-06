@@ -3,6 +3,8 @@ var CodeMirror = require('codemirror/lib/codemirror');
 require('codemirror/lib/codemirror.css');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/addon/edit/matchbrackets');
+require('codemirror/addon/scroll/simplescrollbars');
+require('codemirror/addon/scroll/simplescrollbars.css');
 
 var ko = require('knockout');
 

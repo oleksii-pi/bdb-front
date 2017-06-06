@@ -42,8 +42,8 @@
                             <input type="checkbox" data-bind="checked: $rawData" />
                         </div>
 
-                        <div data-bind="if: $rawData.dataType == 'json', visible: $rawData.dataType == 'json'">
-                            <textarea data-bind="value: $rawData, codemirror: {mode: 'application/json', theme: 'default', matchBrackets:true, lineNumbers: false}"></textarea>
+                        <div data-bind="if: $rawData.dataType == 'javascript', visible: $rawData.dataType == 'javascript'">
+                            <textarea data-bind="value: $rawData, codemirror: {mode: 'javascript', theme: 'default', matchBrackets:true, scrollbarStyle: 'simple', lineNumbers: false}"></textarea>
                         </div>
                     </td>
                 </tr>
