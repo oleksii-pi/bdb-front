@@ -4,7 +4,7 @@
 }
 
 g > .selected {
-    stroke: #ff9900;
+    stroke: orange;
 }
 
 .axis line {
