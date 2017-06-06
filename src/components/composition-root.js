@@ -20,6 +20,11 @@ components.register(
     require('./textbox/textbox-view')
 );
 
+components.register(
+    'block',
+    require('./block/block-viewmodel'),
+    require('./block/block-view')
+);
 
 module.exports.run = function (svgParentNode) {
     //var diagramData = {component: 'diagram', id: 'diagram1'};
@@ -32,8 +37,8 @@ module.exports.run = function (svgParentNode) {
 
     //debug initialize repaint:
     diagramViewModel.elements.valueHasMutated();
-
+    //debug initialize selection:
     diagramViewModel.elements()[0].commandSelect();
 
-    ko.applyBindings(diagramViewModel); //! should be in another place ; consider: ko.applyBindings(diagramViewModel, paramsNode)
+    ko.applyBindings(diagramViewModel, $('#params')[0]); //! should be in another place ; consider: ko.applyBindings(diagramViewModel, paramsNode)
 };
