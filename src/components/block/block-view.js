@@ -43,6 +43,7 @@ module.exports = function(vm, parentNode) {
     function update() {
 
         g.select('.linkIn')
+            .attr('visibility', vm.selected() ? 'visible' : 'hidden')
             .attr('cx', vm.x() + vm.width() / 2)
             .attr('cy', vm.y() - linkRadius)
         ;
@@ -82,19 +83,21 @@ module.exports = function(vm, parentNode) {
             .data(vm.outLinksViewModel());
         outLinks.exit().remove();
 
-        var outLinkGroups = outLinks
+        var outLinksEnter = outLinks
             .enter()
             .append('g')
             .attr('class', 'linkOut');
 
-        outLinkGroups.append('circle')
+        outLinksEnter.append('circle')
             .attr('r', linkRadius);
 
-        outLinkGroups.append('text');
+        outLinksEnter.append('text');
 
-        outLinks = outLinkGroups.merge(outLinks);
+        outLinks = outLinks.merge(outLinksEnter);
 
-        outLinks.select('circle')
+        outLinks
+            .select('circle')
+            .attr('visibility', vm.selected() ? 'visible' : 'hidden')
             .each(function(data, index) {
                 var cx = vm.x() + index * sectionLength + sectionLength / 2;
                 var cy = vm.y() + vm.height() + linkRadius;
@@ -105,7 +108,6 @@ module.exports = function(vm, parentNode) {
 
         outLinks.select('text')
             .each(function(data, index) {
-                console.log(data, index);
                 var cx = vm.x() + index * sectionLength + sectionLength / 2;
                 var cy = vm.y() + vm.height() - linkRadius;
                 d3.select(this)
@@ -114,6 +116,7 @@ module.exports = function(vm, parentNode) {
                     .html(data)
                 ;
             });
+
     };
 
     update();
