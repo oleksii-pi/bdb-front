@@ -73,6 +73,8 @@ module.exports = function(vm, parentNode) {
             }))
         ;
 
+        //// out links:
+
         var outLinksCount = vm.outLinksViewModel().length;
         var sectionLength = vm.width() / outLinksCount;
 
@@ -90,7 +92,7 @@ module.exports = function(vm, parentNode) {
 
         outLinkGroups.append('text');
 
-        //outLinks = outLinks.enter().merge(outLinks);
+        outLinks = outLinkGroups.merge(outLinks);
 
         outLinks.select('circle')
             .each(function(data, index) {
