@@ -43,9 +43,10 @@ module.exports = function(vm, parentNode) {
     function update() {
 
         g.select('.linkIn')
-            .attr('visibility', vm.selected() ? 'visible' : 'hidden')
+            .attr('visibility', vm.linking() ? 'visible' : 'hidden')
             .attr('cx', vm.x() + vm.width() / 2)
             .attr('cy', vm.y() - linkRadius)
+            .on('mousedown', function() { vm.commandEndLink(); })
         ;
 
         g.select('rect')
@@ -89,7 +90,11 @@ module.exports = function(vm, parentNode) {
             .attr('class', 'linkOut');
 
         outLinksEnter.append('circle')
-            .attr('r', linkRadius);
+            .attr('r', linkRadius)
+            .on('mousedown', function(datum, index) { vm.commandStartLink(index); })
+            .on('mouseover', function() { d3.select(this).classed('mouseover', !vm.linking())} )
+            .on('mouseout', function() { d3.select(this).classed('mouseover', null)} )
+        ;
 
         outLinksEnter.append('text');
 
@@ -97,7 +102,8 @@ module.exports = function(vm, parentNode) {
 
         outLinks
             .select('circle')
-            .attr('visibility', vm.selected() ? 'visible' : 'hidden')
+            .attr('visibility', !!vm.selected() && !vm.linking() ? 'visible' : 'hidden')
+
             .each(function(data, index) {
                 var cx = vm.x() + index * sectionLength + sectionLength / 2;
                 var cy = vm.y() + vm.height() + linkRadius;

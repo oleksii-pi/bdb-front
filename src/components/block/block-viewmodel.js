@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var inheritBaseComponent = require('./../base-component');
 
-module.exports = function (data) {
+module.exports = function (data, parentViewModel) {
     data.width = data.width || 200;  // default while create new
     data.height = data.height || 150;
     inheritBaseComponent(this, data);
@@ -13,6 +13,7 @@ module.exports = function (data) {
     self.params = ko.observable(data.params || '').extend({dataType: "javascript"});
     self.code = ko.observable(data.code || '// block code');
     self.out = ko.observable(data.out || '').extend({dataType: "string"});
+    self.outLinks = ko.observableArray(data.outLinks || []);
 
     self.paramsViewModel = ko.computed(() => {
         try {
@@ -33,7 +34,24 @@ module.exports = function (data) {
         return self.out().split(',').map(item => item.trim()).filter(item => item != '');
     });
 
-    self.addViewChangers(self.title, self.singleton, self.params, self.out);
-    self.blockParams.splice(0, 0, self.title);
-    self.blockParams.push(self.singleton, self.params, self.out);
+    self.commandStartLink = (outIndex) => {
+        var linking = parentViewModel.linking;
+        if (!linking()) {
+            linking({vm: self, outIndex: outIndex});
+        }
+    };
+
+    self.commandEndLink = () => {
+        var linking = parentViewModel.linking;
+        if (linking()) {
+            //linking.vm.outLinks[linking.outIndex].push(self.id()); //!
+            parentViewModel.linking(null)
+        }
+    };
+
+    self.linking = ko.computed(() => parentViewModel.linking());
+
+    self.addViewChangers(self.title, self.singleton, self.params, parentViewModel.linking, self.out);
+    self.designerParams.splice(0, 0, self.title);
+    self.designerParams.push(self.singleton, self.params, self.out);
 };
