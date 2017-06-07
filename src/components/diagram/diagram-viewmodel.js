@@ -102,6 +102,24 @@ module.exports = function (data) {
         self.elements().forEach(item => item.selected(false));
     };
 
+    self.commandStartLink = (viewmodel, outIndex) => {
+        var linking = self.linking;
+        if (!linking()) {
+            //! create new link
+            linking({viewmodel: viewmodel, outIndex: outIndex});
+        }
+    };
+
+    self.commandEndLink = (viewmodel) => {
+        var linking = self.linking;
+        if (linking()) {
+            //! finish new link
+            //! if link already exists
+            var id = linking().viewmodel.id();
+            self.linking(null);
+        }
+    };
+
     // public functions:
 
     self.getViewModelById = (id) => {

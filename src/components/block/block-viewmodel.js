@@ -35,7 +35,7 @@ module.exports = function (data, parentViewModel) {
     self.inLinkPoint = ko.computed(() => ({x: self.x() + self.width() / 2, y: self.y()}));
 
     self.outLinksViewModel = ko.computed(() => {
-        return self.out().split(',').map(item => item.trim()); //! return [''] for empty string
+        return self.out().split(',').map(item => item.trim()); //! returns [''] for empty string
     });
 
     self.outLinksCount = ko.computed(() => {
@@ -58,18 +58,11 @@ module.exports = function (data, parentViewModel) {
     });
 
     self.commandStartLink = (outIndex) => {
-        var linking = parentViewModel.linking;
-        if (!linking()) {
-            linking({viewmodel: self, outIndex: outIndex});
-        }
+        parentViewModel.commandStartLink(self, outIndex);
     };
 
     self.commandEndLink = () => {
-        var linking = parentViewModel.linking;
-        if (linking()) {
-            //linking.vm.outLinks[linking.outIndex].push(self.id()); //!
-            parentViewModel.linking(null)
-        }
+        parentViewModel.commandEndLink(self);
     };
 
     self.linking = ko.computed(() => parentViewModel.linking());

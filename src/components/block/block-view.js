@@ -100,7 +100,6 @@ module.exports = function(vm, parentNode) {
         outLinks
             .select('circle')
             .attr('visibility', !!vm.selected() && !vm.linking() ? 'visible' : 'hidden')
-
             .each(function(data, index) {
                 var cx = vm.outLinksPoints()[index].x;
                 var cy = vm.outLinksPoints()[index].y + linkRadius;
