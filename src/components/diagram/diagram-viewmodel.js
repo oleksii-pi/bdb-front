@@ -18,6 +18,30 @@ module.exports = function (data) {
     self.dragging = ko.observable(false);
     self.linking = ko.observable(null);
 
+    // loading:
+
+    var _viewModelArray = [];
+    if (data.elements) {
+        for (var i = 0; i < data.elements.length; i++) {
+            var vm = vmFactory(data.elements[i], self);
+            _viewModelArray.push(vm);
+        }
+    }
+
+    self.elements = ko.observableArray(_viewModelArray);
+
+    var _linksArray = [];
+    if (data.links) {
+        for (var i = 0; i < data.links.length; i++) {
+            var vm = vmFactory(data.links[i], self);
+            _linksArray.push(vm);
+        }
+    }
+
+    self.links = ko.observableArray(_linksArray);
+
+    //
+
     self.selectedElement = ko.computed(function(){
         var selectedCount = self.elements().filter(item => item.selected()).length;
 
@@ -30,20 +54,6 @@ module.exports = function (data) {
             return selectedElement;
         }
     });
-
-    // loading:
-
-    var _viewModelArray = [];
-    if (data.elements) {
-        for (var i = 0; i < data.elements.length; i++) {
-            var vm = vmFactory(data.elements[i], self);
-            _viewModelArray.push(vm);
-        }
-    }
-
-    //! load links:
-
-    self.elements = ko.observableArray(_viewModelArray);
 
     // commands:
 
@@ -94,6 +104,22 @@ module.exports = function (data) {
 
     // public functions:
 
-    self.getViewModelById = (id) => self.elements.filter(item => item.id() == id)[0];
+    self.getViewModelById = (id) => {
+        if (id == null || typeof id === 'undefined') {
+            return null;
+        }
+        var found = self.elements().concat(self.links()).filter(item => item.id() == id);
+        if (found.length == 1) {
+            return found[0];
+        }
+        return null;
+    };
+
+    self.getElementLinksCount = (id) => {
+        var maxIndex = -1;
+        var indexes = self.links().filter(item => item.source == id).map(item => item.sourceOutIndex());
+        indexes.forEach(item => item > maxIndex ? maxIndex = item : 0); //! will it work ?
+        return maxIndex + 1;
+    };
 
 };

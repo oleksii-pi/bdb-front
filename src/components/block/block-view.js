@@ -44,8 +44,8 @@ module.exports = function(vm, parentNode) {
 
         g.select('.linkIn')
             .attr('visibility', vm.linking() ? 'visible' : 'hidden')
-            .attr('cx', vm.x() + vm.width() / 2)
-            .attr('cy', vm.y() - linkRadius)
+            .attr('cx', vm.inLinkPoint().x)
+            .attr('cy', vm.inLinkPoint().y - linkRadius)
             .on('mousedown', function() { vm.commandEndLink(); })
         ;
 
@@ -77,9 +77,6 @@ module.exports = function(vm, parentNode) {
 
         //// out links:
 
-        var outLinksCount = vm.outLinksViewModel().length;
-        var sectionLength = vm.width() / outLinksCount;
-
         var outLinks = g.selectAll('g.linkOut')
             .data(vm.outLinksViewModel());
         outLinks.exit().remove();
@@ -105,8 +102,8 @@ module.exports = function(vm, parentNode) {
             .attr('visibility', !!vm.selected() && !vm.linking() ? 'visible' : 'hidden')
 
             .each(function(data, index) {
-                var cx = vm.x() + index * sectionLength + sectionLength / 2;
-                var cy = vm.y() + vm.height() + linkRadius;
+                var cx = vm.outLinksPoints()[index].x;
+                var cy = vm.outLinksPoints()[index].y + linkRadius;
                 d3.select(this)
                     .attr("cx", cx)
                     .attr("cy", cy);
@@ -114,8 +111,8 @@ module.exports = function(vm, parentNode) {
 
         outLinks.select('text')
             .each(function(data, index) {
-                var cx = vm.x() + index * sectionLength + sectionLength / 2;
-                var cy = vm.y() + vm.height() - linkRadius;
+                var cx = vm.outLinksPoints()[index].x;
+                var cy = vm.outLinksPoints()[index].y - linkRadius;
                 d3.select(this)
                     .attr("x", cx)
                     .attr("y", cy)
