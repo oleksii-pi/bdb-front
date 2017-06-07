@@ -1,5 +1,5 @@
 var d3 = require('d3');
-require('./diagram-view.css');
+require('./diagram.css');
 var vFactory = require('./../components').ViewFactory;
 
 module.exports = function(vm, parentNode) {
@@ -107,7 +107,7 @@ module.exports = function(vm, parentNode) {
         });
 
         d3.select(parentNode)
-            .selectAll('.element')
+            .selectAll('.element, .link')
             .on('mousedown', function(d) {
                 if (!vm.dragging()) {
                     if (d3.event.shiftKey){
