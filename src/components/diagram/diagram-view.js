@@ -147,4 +147,9 @@ module.exports = function(vm, parentNode) {
     vm.elements.subscribe(function (newValue) {
         update(newValue);
     });
+
+    vm.linking.subscribe(newValue => {
+        svgGroup.selectAll('.linkIn')
+            .attr('visibility', newValue ? 'visible' : 'hidden');
+    });
 }

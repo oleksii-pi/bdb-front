@@ -52,7 +52,7 @@ module.exports = function (data) {
 
     self.commandAdd = function (x, y, component) {
         var id = genNewId(component);
-        var vm = vmFactory({id: id, component: component, x: x, y: y});  // create ViewModel with default data
+        var vm = vmFactory({id: id, component: component, x: x, y: y}, self);  // create ViewModel with default data
         self.commandDeselectAll();
         vm.commandSelect();
         self.elements.push(vm);
@@ -96,4 +96,7 @@ module.exports = function (data) {
             return selectedElement;
         }
     });
+
+    self.linking = ko.observable(null);
+
 };
