@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var inheritBaseComponent = require('./../base-component');
 
-module.exports = function (data) {
+module.exports = function (data, parentViewModel) {
     inheritBaseComponent(this, data);
 
     var self = this;
@@ -11,5 +11,5 @@ module.exports = function (data) {
     self.code = ko.observable(data.code || '// block code');
 
     //self.addViewChangers(); // if need
-    self.blockParams.push(self.singleton, self.params);
+    self.designerParams.push(self.singleton, self.params);
 };

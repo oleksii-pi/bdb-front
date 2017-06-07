@@ -15,8 +15,7 @@ module.exports = function (component, data) {
         self.selected(!self.selected());
     };
 
-    // designer params:
-    self.blockParams = [self.x, self.y, self.width, self.height];
+    self.designerParams = [self.x, self.y, self.width, self.height];
 
     var _viewChangers = [];
     self.addViewChangers = function () {
