@@ -1,12 +1,6 @@
 var ko = require('knockout');
 var vmFactory = require('./../components').ViewModelFactory;
 
-var functor = function(value) {
-    return typeof value === "function" ? v : function() {
-        return arguments.length ? value = arguments[0] : value;
-    };
-};
-
 module.exports = function (data) {
     var self = this;
 
@@ -16,37 +10,51 @@ module.exports = function (data) {
     self.component = ko.computed(() => data.component); // readonly
     self.maxThreadCount = ko.observable(data.maxThreadCount || 100).extend({dataType: "integer", range: {min: 1, max: 500}});
 
-    self.blockParams = [self.maxThreadCount];
+    self.designerParams = [self.maxThreadCount];
 
-    //
+    // not visible observables:
 
     self.showParams = ko.observable(true);
-    self.showCodeEditor = ko.observable(true);
+    self.dragging = ko.observable(false);
+    self.linking = ko.observable(null);
 
-    var vms = [];
+    self.selectedElement = ko.computed(function(){
+        var selectedCount = self.elements().filter(item => item.selected()).length;
+
+        if (selectedCount == 0) {
+            return self;
+        }
+
+        if (selectedCount == 1) {
+            var selectedElement = self.elements().filter(item => item.selected())[0];
+            return selectedElement;
+        }
+    });
+
+    // loading:
+
+    var _viewModelArray = [];
     if (data.elements) {
         for (var i = 0; i < data.elements.length; i++) {
-            var vm = vmFactory(data.elements[i]);
-            vms.push(vm);
+            var vm = vmFactory(data.elements[i], self);
+            _viewModelArray.push(vm);
         }
     }
 
-    self.elements = ko.observableArray(vms);
+    //! load links:
 
-    self.hash = ko.computed(function(){
-        return self.elements().map(item => item.hash());
-    });
+    self.elements = ko.observableArray(_viewModelArray);
 
-    self.dragging = functor(false);
+    // commands:
 
     function genNewId(component) {
         var maxId = 0;
         self.elements().forEach(item => {
             if (item.component() == component) {
-            var id = +item.id().substr(component.length);
-            if (maxId < id) maxId = id;
-        }
-    });
+                var id = +item.id().substr(component.length);
+                if (maxId < id) maxId = id;
+            }
+        });
         return component + (++maxId);
     };
 
@@ -84,19 +92,8 @@ module.exports = function (data) {
         self.elements().forEach(item => item.selected(false));
     };
 
-    self.selectedElement = ko.computed(function(){
-        var selectedCount = self.elements().filter(item => item.selected()).length;
+    // public functions:
 
-        if (selectedCount == 0) {
-            return self;
-        }
-
-        if (selectedCount == 1) {
-            var selectedElement = self.elements().filter(item => item.selected())[0];
-            return selectedElement;
-        }
-    });
-
-    self.linking = ko.observable(null);
+    self.getViewModelById = (id) => self.elements.filter(item => item.id() == id)[0];
 
 };
