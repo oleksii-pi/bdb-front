@@ -10,8 +10,12 @@
     fill: orange;
 }
 
-.block > .linkIn {
-    stroke: lightblue;
+.block .linkIn {
+    stroke: orange;
+}
+
+.block .linkOut .mouseover {
+    stroke: orange;
 }
 
 .block > .linkOut text {
