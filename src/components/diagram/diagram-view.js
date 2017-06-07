@@ -102,12 +102,12 @@ module.exports = function(vm, parentNode) {
         });
         elements.exit().remove();
 
-        elements.enter().append("g").each(function(vm) {
-            vFactory(vm, this); // create new self-painting view
+        elements.enter().append("g").each(function(elementVM) {
+            vFactory(elementVM, this); // create new self-painting view
         });
 
         d3.select(parentNode)
-            .selectAll('.element, .link')
+            .selectAll('.element') //! , .link
             .on('mousedown', function(d) {
                 if (!vm.dragging()) {
                     if (d3.event.shiftKey){
