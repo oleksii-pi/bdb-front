@@ -1,0 +1,19 @@
+.link {
+
+}
+
+.link circle, .link  .line {
+    fill: none;
+    stroke: lightblue;
+    stroke-width: 3px;
+}
+
+.link circle {
+    fill: #fff;
+    fill-opacity: .2;
+    cursor: move;
+}
+
+.link path.line {
+    cursor: pointer;
+}

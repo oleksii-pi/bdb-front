@@ -5,26 +5,71 @@ module.exports = function (data, parentViewModel) {
 
     self.id = ko.observable(data.id);
     self.component = ko.computed(() => data.component); // readonly
-
-    // self.x = ko.observable(data.x).extend({dataType: "float", precision: 2});
-    // self.y = ko.observable(data.y).extend({dataType: "float", precision: 2});
-
     self.selected = ko.observable(false);
+
+    self.source = ko.observable(data.source);
+    self.sourceOutIndex = ko.observable(data.sourceOutIndex);
+    self.destination = ko.observable(data.destination);
+    self.path = ko.observableArray(data.path || []);
+
+    // computed:
+    var _sourceVM = () => parentViewModel.getViewModelById(self.source());
+    var _destinationVM = () => parentViewModel.getViewModelById(self.destination());
+
+    self.fullPath = ko.computed(() => {
+        var result = [];
+
+        var x1 = _sourceVM().outLinksPoints()[self.sourceOutIndex()].x;
+        var y1 = _sourceVM().outLinksPoints()[self.sourceOutIndex()].y;
+
+        result.push([x1, y1]);
+        result = result.concat(self.path());
+
+        if (_destinationVM()) {
+            var xLast = _destinationVM().inLinkPoint().x;
+            var yLast = _destinationVM().inLinkPoint().y;
+            result.push([xLast, yLast]);
+        }
+
+        return result;
+    });
+
+
+
+    // commands:
 
     self.commandSelect = function() {
         self.selected(!self.selected());
     };
 
-    self.designerParams = [];
+    self.commandCancel = function() {
+        parentViewModel.commandCancelLink();
+    };
 
-    // var _viewChangers = [];
-    // self.addViewChangers = function () {
-    //     for (var i = 0; i < arguments.length; i++) {
-    //         _viewChangers.push(arguments[i]);
-    //     }
-    //     self.hash = ko.pureComputed(() => _viewChangers.map(item => item()));
-    // };
+    self.commandSetLastPoint = function(point) {
+        self.path()[self.path().length - 1] = point;
+        self.path.valueHasMutated();
+    };
+
+    self.commandAddPoint = function(point) {
+        self.path.push(point);
+    };
+
     //
-    // // add observables that affects view render:
-    // self.addViewChangers(self.id, self.x, self.y, self.width, self.height, self.selected);
+
+    self.destination.subscribe(function(newValue) {
+        if (newValue) {
+            self.path.pop();
+        }
+    });
+
+    //
+
+    self.hash = ko.computed(() => {
+        return [
+            self.selected()
+        ].concat(self.fullPath());
+    });
+
+    self.designerParams = [];
 }
