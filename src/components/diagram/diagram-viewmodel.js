@@ -123,9 +123,12 @@ module.exports = function (data) {
     self.commandStartLink = function(sourceViewModel, sourceOutIndex) {
         var linking = self.linking;
         if (!linking()) {
+            self.commandDeselectAll();
+
             var id = genNewId('link');
             var linkData = {id: id, component: 'link', source: sourceViewModel.id(), sourceOutIndex: sourceOutIndex};
             var vm = vmFactory(linkData, self);  // create ViewModel with default data
+            vm.commandSelect();
             linking(vm);
             self.links.push(vm);
         }
