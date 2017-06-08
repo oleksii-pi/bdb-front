@@ -76,6 +76,32 @@ module.exports = function(vm, parentNode) {
             .classed('selected', () => vm.selected())
         ;
 
+        if (vm.selected()) {
+            var path = vm.fullPath();
+            var circle = g.selectAll("circle")
+                .data(path.slice(1, path.length - 1), function(d) { return d; });
+
+            circle.exit().remove();
+
+            var added = circle.enter()
+                .append("circle")
+                .attr("r", 5)
+                .call( d3.drag().on("drag", function(d, index) {
+                    var m = [d3.event.x, d3.event.y];
+                    vm.path()[index] = m;
+                    vm.path.valueHasMutated();
+                }))
+                ;
+
+            circle.merge(added)
+                .attr("cx", function(d) { return d[0]; })
+                .attr("cy", function(d) { return d[1]; })
+            //.classed("selected", function(d) { return d === selected; })
+            ;
+        } else {
+            g.selectAll("circle").remove();
+        }
+
     };
 
     update();
