@@ -16,7 +16,9 @@ module.exports = function(vm, parentNode) {
     focusDiagram();
 
     svg.on('mousedown', function () {
-        vm.commandDeselectAll();
+        if (!vm.linking()) {
+            vm.commandDeselectAll();
+        }
         focusDiagram();
 
         if (d3.event.altKey) {  //!! implement according to UI state
@@ -85,10 +87,7 @@ module.exports = function(vm, parentNode) {
             //.classed(collectionClass.substr(1), true) // not neсessary: view change it
             .each(function(elementVM) {
                 vFactory(elementVM, this);
-            });
-
-        d3.select(parentNode)
-            .selectAll(collectionClass)
+            })
             .on('mousedown', function(d) {
                 if (!vm.dragging()) {
                     if (d3.event.shiftKey){
@@ -107,7 +106,7 @@ module.exports = function(vm, parentNode) {
                     d3.event.stopPropagation();
                 }
             })
-            .call(d3.drag().on('start', dragStart).on("drag", dragged).on('end', dragEnd))
+            .call( d3.drag().on('start', dragStart).on("drag", dragged).on('end', dragEnd) )
         ;
 
         function dragStart() {
