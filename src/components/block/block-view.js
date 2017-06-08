@@ -46,7 +46,14 @@ module.exports = function(vm, parentNode) {
             .attr('visibility', vm.linking() ? 'visible' : 'hidden')
             .attr('cx', vm.inLinkPoint().x)
             .attr('cy', vm.inLinkPoint().y - linkRadius)
-            .on('mousedown', function() { vm.commandEndLink(); })
+            .on('mousedown', function() {
+                vm.commandEndLink();
+                // don't let select the block:
+                if (d3.event) {
+                    d3.event.preventDefault();
+                    d3.event.stopPropagation();
+                }
+            })
         ;
 
         g.select('rect')
@@ -88,7 +95,14 @@ module.exports = function(vm, parentNode) {
 
         outLinksEnter.append('circle')
             .attr('r', linkRadius)
-            .on('mousedown', function(datum, index) { vm.commandStartLink(index); })
+            .on('mousedown', function(datum, index) {
+                vm.commandStartLink(index);
+                // don't let select the block:
+                if (d3.event) {
+                    d3.event.preventDefault();
+                    d3.event.stopPropagation();
+                }
+            })
             .on('mouseover', function() { d3.select(this).classed('mouseover', !vm.linking())} )
             .on('mouseout', function() { d3.select(this).classed('mouseover', null)} )
         ;
