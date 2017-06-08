@@ -64,12 +64,13 @@ module.exports = function(vm, parentNode) {
         ;
     }
 
-    function update() {
-        g.select('path').remove();
+    var svgPath = g.append("path")
+        .attr("class", "line")
+        .attr('marker-end', function(d,i){ return 'url(#end-arrow)' })
+    ;
 
-        var svgPath = g.append("path")
-            .attr("class", "line")
-            .attr('marker-end', function(d,i){ return 'url(#end-arrow)' })
+    function update() {
+        svgPath
             .datum(vm.fullPath())
             .attr("d", line)
             .attr('pointer-events', vm.destination() ? 'auto' : 'none')
