@@ -65,29 +65,7 @@ module.exports = function(vm, parentNode) {
     });
 
 
-    var svgBounds = svg.node().getBoundingClientRect();
-    var width = ~~svgBounds.width; // ~~ = round
-    var height = ~~svgBounds.height; // ~~ = round
 
-    svgGroup.append("g")
-        .attr("class", "x axis")
-        .selectAll("line")
-        .data(d3.range(0, width, 10))
-        .enter().append("line")
-        .attr("x1", function(d) { return d; })
-        .attr("y1", 0)
-        .attr("x2", function(d) { return d; })
-        .attr("y2", height);
-
-    svgGroup.append("g")
-        .attr("class", "y axis")
-        .selectAll("line")
-        .data(d3.range(0, height, 10))
-        .enter().append("line")
-        .attr("x1", 0)
-        .attr("y1", function(d) { return d; })
-        .attr("x2", width)
-        .attr("y2", function(d) { return d; });
 
 
     svg.call(d3.zoom()
@@ -96,18 +74,21 @@ module.exports = function(vm, parentNode) {
             svgGroup.attr("transform", d3.event.transform);
         }));
 
-    function update(data) {
-        var elements = svgGroup.selectAll('.element').data(data, function (d) {
+    function update(data, collectionClass) {
+        var elements = svgGroup.selectAll(collectionClass).data(data, function (d) {
             return d.id();
         });
         elements.exit().remove();
 
-        elements.enter().append("g").each(function(elementVM) {
-            vFactory(elementVM, this); // create new self-painting view
-        });
+        elements.enter()
+            .append('g')
+            //.classed(collectionClass.substr(1), true) // not neсessary: view change it
+            .each(function(elementVM) {
+                vFactory(elementVM, this);
+            });
 
         d3.select(parentNode)
-            .selectAll('.element') //! , .link
+            .selectAll(collectionClass)
             .on('mousedown', function(d) {
                 if (!vm.dragging()) {
                     if (d3.event.shiftKey){
@@ -145,11 +126,53 @@ module.exports = function(vm, parentNode) {
 
 
     vm.elements.subscribe(function (newValue) {
-        update(newValue);
+        update(newValue, '.element');
+    });
+
+    vm.links.subscribe(function (newValue) {
+        update(newValue, '.link');
     });
 
     vm.linking.subscribe(newValue => {
         svgGroup.selectAll('.linkIn')
             .attr('visibility', newValue ? 'visible' : 'hidden');
+    });
+
+    vm.showAxis.subscribe(newValue => {
+        if (newValue) {
+            var svgBounds = svg.node().getBoundingClientRect();
+            var width = ~~svgBounds.width; // ~~ = round
+            var height = ~~svgBounds.height; // ~~ = round
+
+            svgGroup.insert("g", 'g')
+                .attr("class", "x axis")
+                .selectAll("line")
+                .data(d3.range(0, width, 10))
+                .enter().append("line")
+                .attr("x1", function (d) {
+                    return d;
+                })
+                .attr("y1", 0)
+                .attr("x2", function (d) {
+                    return d;
+                })
+                .attr("y2", height);
+
+            svgGroup.insert("g", 'g')
+                .attr("class", "y axis")
+                .selectAll("line")
+                .data(d3.range(0, height, 10))
+                .enter().append("line")
+                .attr("x1", 0)
+                .attr("y1", function (d) {
+                    return d;
+                })
+                .attr("x2", width)
+                .attr("y2", function (d) {
+                    return d;
+                });
+        } else {
+            svgGroup.selectAll('.axis').remove();
+        }
     });
 }

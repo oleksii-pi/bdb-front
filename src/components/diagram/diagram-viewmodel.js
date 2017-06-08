@@ -10,13 +10,16 @@ module.exports = function (data) {
     self.component = ko.computed(() => data.component); // readonly
     self.maxThreadCount = ko.observable(data.maxThreadCount || 100).extend({dataType: "integer", range: {min: 1, max: 500}});
 
-    self.designerParams = [self.maxThreadCount];
+    self.showAxis = ko.observable(false).extend({dataType: "boolean"});
+
+    self.designerParams = [self.maxThreadCount, self.showAxis];
 
     // not visible observables:
 
     self.showParams = ko.observable(true);
     self.dragging = ko.observable(false);
     self.linking = ko.observable(null);
+
 
     // loading:
 
@@ -77,7 +80,12 @@ module.exports = function (data) {
     };
 
     self.commandDeleteSelected = function() {
-        self.elements.remove(item => item.selected());
+        var deletedElements = self.elements.remove(item => item.selected());
+        deletedElements.forEach(deleted => {
+            self.links.remove(item => item.source() == deleted.id());
+            self.links.remove(item => item.destination() == deleted.id());
+        });
+        self.links.remove(item => item.selected());
     };
 
     self.commandMoveSelected = function(deltaX, deltaY) {
@@ -85,6 +93,15 @@ module.exports = function (data) {
             if (item.selected()) {
                 item.x(item.x() + deltaX);
                 item.y(item.y() + deltaY);
+            }
+        });
+        self.links().forEach(link => {
+            if (link.selected()) {
+                link.path().forEach(point => {
+                    point[0] += deltaX;
+                    point[1] += deltaY;
+                });
+                link.path.valueHasMutated();
             }
         });
     };
@@ -100,25 +117,39 @@ module.exports = function (data) {
 
     self.commandDeselectAll = function() {
         self.elements().forEach(item => item.selected(false));
+        self.links().forEach(item => item.selected(false));
     };
 
-    self.commandStartLink = (viewmodel, outIndex) => {
+    self.commandStartLink = function(sourceViewModel, sourceOutIndex) {
         var linking = self.linking;
         if (!linking()) {
-            //! create new link
-            linking({viewmodel: viewmodel, outIndex: outIndex});
+            var id = genNewId('link');
+            var linkData = {id: id, component: 'link', source: sourceViewModel.id(), sourceOutIndex: sourceOutIndex};
+            var vm = vmFactory(linkData, self);  // create ViewModel with default data
+            linking(vm);
+            self.links.push(vm);
         }
     };
 
-    self.commandEndLink = (viewmodel) => {
+    self.commandEndLink = function(destinationViewModel) {
         var linking = self.linking;
         if (linking()) {
-            //! finish new link
-            //! if link already exists
-            var id = linking().viewmodel.id();
-            self.linking(null);
+            //! if link already exists?
+            linking().destination(destinationViewModel.id());
+            linking(null);
         }
     };
+
+    self.commandCancelLink = function () {
+        var linking = self.linking;
+        if (linking()) {
+            var index = self.links.indexOf(linking());
+            if (index > -1) {
+                self.links.splice(index, 1);
+            }
+            linking(null);
+        }
+    }
 
     // public functions:
 

@@ -3,8 +3,8 @@
     height: 99%;
 }
 
-g > .selected {
-    stroke: orange;
+.selected {
+    stroke: orange!important;
 }
 
 .axis line {
