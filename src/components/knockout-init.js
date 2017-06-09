@@ -5,6 +5,9 @@ var ko = require('knockout');
 ko.extenders.logChange = function(target, option) {
     target.subscribe(function(newValue) {
         console.log(option + ": " + newValue);
+        if (option === 'debugger') {
+            debugger;
+        }
     });
     return target;
 };
