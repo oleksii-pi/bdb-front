@@ -2,7 +2,7 @@
 
 }
 
-.link circle, .link  .line {
+.link .line {
     fill: none;
     stroke: lightblue;
     stroke-width: 3px;
@@ -10,7 +10,7 @@
 
 .link circle {
     fill: #fff;
-    fill-opacity: .2;
+    stroke: orange;
     cursor: move;
 }
 

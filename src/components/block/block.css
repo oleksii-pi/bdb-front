@@ -1,4 +1,8 @@
-.block  {
+.block {
+
+}
+
+.block rect {
     stroke-width: 3px;
     stroke: lightblue;
     fill: white;
@@ -10,8 +14,11 @@
     fill: orange;
 }
 
-.block .linkIn {
+.block .linkIn, .block .linkOut {
+    stroke-width: 2px;
     stroke: orange;
+    fill: white;
+    cursor: pointer;
 }
 
 .block .linkOut .mouseover {
