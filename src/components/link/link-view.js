@@ -67,11 +67,15 @@ module.exports = function(vm, parentNode) {
     var svgPath = g.append("path")
         .attr("class", "line")
         .attr('marker-end', function(d,i){ return 'url(#end-arrow)' })
+        .on('mousedown', function() {
+            this.mousedownSelected = vm.selected();
+        })
         .on('click', function() {
-            if (vm.selected()) {
-                var mousePoint = d3.mouse(svg);
-                var insertIndex = getPathPointNearestIndex(this, mousePoint);
-                vm.path.splice(insertIndex - 1, 0, mousePoint);
+            // add
+            if (vm.selected() && this.mousedownSelected) {
+                var m = translateCoords(d3.event.x, d3.event.y);
+                var insertIndex = getPathPointNearestIndex(this, m);
+                vm.path.splice(insertIndex - 1, 0, m);
             }
         })
     ;
@@ -94,7 +98,8 @@ module.exports = function(vm, parentNode) {
             var added = circle.enter()
                 .append("circle")
                 .attr("r", 5)
-                .on('click', function(d) {
+                .on('click', function(d) {  // mousedown throw strange error inside d3
+                    // remove
                     var index = vm.path().indexOf(d);
                     if (index >= 0) {
                         vm.path.splice(index, 1);
