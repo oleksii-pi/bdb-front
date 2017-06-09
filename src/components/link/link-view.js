@@ -87,6 +87,11 @@ module.exports = function(vm, parentNode) {
             var added = circle.enter()
                 .append("circle")
                 .attr("r", 5)
+                .on('click', function(d, index) {
+                    if (d3.event.shiftKey) {
+                        vm.path.splice(index, 1);
+                    }
+                })
                 .call( d3.drag().on("drag", function(d, index) {
                     var m = [d3.event.x, d3.event.y];
                     vm.path()[index] = m;
@@ -97,7 +102,6 @@ module.exports = function(vm, parentNode) {
             circle.merge(added)
                 .attr("cx", function(d) { return d[0]; })
                 .attr("cy", function(d) { return d[1]; })
-            //.classed("selected", function(d) { return d === selected; })
             ;
         } else {
             g.selectAll("circle").remove();
