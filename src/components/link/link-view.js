@@ -67,6 +67,13 @@ module.exports = function(vm, parentNode) {
     var svgPath = g.append("path")
         .attr("class", "line")
         .attr('marker-end', function(d,i){ return 'url(#end-arrow)' })
+        .on('click', function() {
+            if (vm.selected()) {
+                var mousePoint = d3.mouse(svg);
+                var insertIndex = getPathPointNearestIndex(this, mousePoint);
+                vm.path.splice(insertIndex - 1, 0, mousePoint);
+            }
+        })
     ;
 
     function update() {
@@ -87,21 +94,22 @@ module.exports = function(vm, parentNode) {
             var added = circle.enter()
                 .append("circle")
                 .attr("r", 5)
-                .on('click', function(d, index) {
-                    if (d3.event.shiftKey) {
+                .on('click', function(d) {
+                    var index = vm.path().indexOf(d);
+                    if (index >= 0) {
                         vm.path.splice(index, 1);
                     }
                 })
-                .call( d3.drag().on("drag", function(d, index) {
-                    var m = [d3.event.x, d3.event.y];
-                    vm.path()[index] = m;
-                    vm.path.valueHasMutated();
-                }))
                 ;
 
             circle.merge(added)
                 .attr("cx", function(d) { return d[0]; })
                 .attr("cy", function(d) { return d[1]; })
+                .call( d3.drag().on("drag", function(d, index) {
+                    var m = [d3.event.x, d3.event.y];
+                    vm.path()[index] = m;
+                    vm.path.valueHasMutated();
+                }))
             ;
         } else {
             g.selectAll("circle").remove();
