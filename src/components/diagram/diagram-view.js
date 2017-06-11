@@ -80,8 +80,7 @@ module.exports = function(vm, parentNode) {
         }));
 
     function update(data, parentGroup) {
-        var selector = '.' + parentGroup.attr('class') + ' > g';
-        var elements = parentGroup.selectAll(selector).data(data, function (d) {
+        var elements = parentGroup.selectAll(() => parentGroup.node().childNodes).data(data, function (d) {
             return d.id();
         });
         elements.exit().remove();
