@@ -10,7 +10,10 @@ module.exports = function(vm, parentNode) {
         .attr('tabindex', 1)
     ;
 
-    var svgGroup = svg.append('g');
+    var rootGroup = svg.append('g').classed('root', true);
+    var cageGroup = rootGroup.append('g').classed('cage', true);
+    var linksGroup = rootGroup.append('g').classed('links', true);
+    var elementsGroup = rootGroup.append('g').classed('elements', true);
 
     var focusDiagram = () => svg.node().focus();
     focusDiagram();
@@ -73,18 +76,17 @@ module.exports = function(vm, parentNode) {
     svg.call(d3.zoom()
         .scaleExtent([0.3, 8])
         .on("zoom", function() {
-            svgGroup.attr("transform", d3.event.transform);
+            rootGroup.attr("transform", d3.event.transform);
         }));
 
-    function update(data, collectionClass) {
-        var elements = svgGroup.selectAll(collectionClass).data(data, function (d) {
+    function update(data, parentGroup) {
+        var elements = parentGroup.selectAll().data(data, function (d) {
             return d.id();
         });
         elements.exit().remove();
 
         elements.enter()
             .append('g')
-            //.classed(collectionClass.substr(1), true) // not neсessary: view change it
             .each(function(elementVM) {
                 vFactory(elementVM, this);
             })
@@ -125,25 +127,25 @@ module.exports = function(vm, parentNode) {
 
 
     vm.elements.subscribe(function (newValue) {
-        update(newValue, '.element');
+        update(newValue, elementsGroup);
     });
 
     vm.links.subscribe(function (newValue) {
-        update(newValue, '.link');
+        update(newValue, linksGroup);
     });
 
     vm.linking.subscribe(newValue => {
-        svgGroup.selectAll('.linkIn')
+        elementsGroup.selectAll('.linkIn')
             .attr('visibility', newValue ? 'visible' : 'hidden');
     });
 
-    vm.showAxis.subscribe(newValue => {
+    vm.showCage.subscribe(newValue => {
         if (newValue) {
             var svgBounds = svg.node().getBoundingClientRect();
             var width = ~~svgBounds.width; // ~~ = round
             var height = ~~svgBounds.height; // ~~ = round
 
-            svgGroup.insert("g", 'g')
+            cageGroup.insert("g", 'g')
                 .attr("class", "x axis")
                 .selectAll("line")
                 .data(d3.range(0, width, 10))
@@ -157,7 +159,7 @@ module.exports = function(vm, parentNode) {
                 })
                 .attr("y2", height);
 
-            svgGroup.insert("g", 'g')
+            cageGroup.insert("g", 'g')
                 .attr("class", "y axis")
                 .selectAll("line")
                 .data(d3.range(0, height, 10))
@@ -171,7 +173,7 @@ module.exports = function(vm, parentNode) {
                     return d;
                 });
         } else {
-            svgGroup.selectAll('.axis').remove();
+            cageGroup.selectAll('.axis').remove();
         }
     });
 }

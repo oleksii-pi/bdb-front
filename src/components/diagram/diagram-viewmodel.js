@@ -10,9 +10,9 @@ module.exports = function (data) {
     self.component = ko.computed(() => data.component); // readonly
     self.maxThreadCount = ko.observable(data.maxThreadCount || 100).extend({dataType: "integer", range: {min: 1, max: 500}});
 
-    self.showAxis = ko.observable(false).extend({dataType: "boolean"});
+    self.showCage = ko.observable(false).extend({dataType: "boolean"});
 
-    self.designerParams = [self.maxThreadCount, self.showAxis];
+    self.designerParams = [self.maxThreadCount, self.showCage];
 
     // not visible observables:
 
@@ -62,6 +62,15 @@ module.exports = function (data) {
 
     function genNewId(component) {
         var maxId = 0;
+
+        if (component == 'link') {
+            self.links().forEach(item => {
+                var id = +item.id().substr(component.length);
+                if (maxId < id) maxId = id;
+            });
+            return component + (++maxId);
+        }
+
         self.elements().forEach(item => {
             if (item.component() == component) {
                 var id = +item.id().substr(component.length);
