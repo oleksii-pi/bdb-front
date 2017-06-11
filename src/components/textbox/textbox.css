@@ -1,6 +1,6 @@
 .textbox {
     stroke-width: 1px;
-    stroke: lightgray;
+    stroke: transparent;
     fill: transparent;
     pointer-events: all;
 }
