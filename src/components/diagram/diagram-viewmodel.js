@@ -80,12 +80,13 @@ module.exports = function (data) {
     };
 
     self.commandDeleteSelected = function() {
-        var deletedElements = self.elements.remove(item => item.selected());
-        deletedElements.forEach(deleted => {
-            self.links.remove(item => item.source() == deleted.id());
-            self.links.remove(item => item.destination() == deleted.id());
+        var elementsForDelete = self.elements().filter(element => element.selected());
+        elementsForDelete.forEach(element => {
+            self.links.remove(link => link.source() == element.id()).forEach(link => link.dispose());
+            self.links.remove(link => link.destination() == element.id()).forEach(link => link.dispose());
         });
-        self.links.remove(item => item.selected());
+        self.elements.remove(element => element.selected());
+        self.links.remove(link => link.selected()).forEach(link => link.dispose());
     };
 
     self.commandMoveSelected = function(deltaX, deltaY) {
@@ -137,8 +138,8 @@ module.exports = function (data) {
     self.commandEndLink = function(destinationViewModel) {
         var linking = self.linking;
         if (linking()) {
-            //! if link already exists?
-            linking().destination(destinationViewModel.id());
+            var linkVM = linking();
+            linkVM.destination(destinationViewModel.id());
             linking(null);
         }
     };

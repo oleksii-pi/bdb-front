@@ -16,13 +16,15 @@ module.exports = function (data, parentViewModel) {
     var _sourceVM = () => parentViewModel.getViewModelById(self.source());
     var _destinationVM = () => parentViewModel.getViewModelById(self.destination());
 
-    self.fullPath = ko.computed(() => {
+    self.fullPath = ko.pureComputed(() => {
         var result = [];
 
-        var x1 = _sourceVM().outLinksPoints()[self.sourceOutIndex()].x;
-        var y1 = _sourceVM().outLinksPoints()[self.sourceOutIndex()].y;
+        if (_sourceVM()) {
+            var x1 = _sourceVM().outLinksPoints()[self.sourceOutIndex()].x;
+            var y1 = _sourceVM().outLinksPoints()[self.sourceOutIndex()].y;
+            result.push([x1, y1]);
+        };
 
-        result.push([x1, y1]);
         result = result.concat(self.path());
 
         if (_destinationVM()) {
@@ -72,4 +74,9 @@ module.exports = function (data, parentViewModel) {
     });
 
     self.designerParams = [];
+
+    self.dispose = () => {
+        self.fullPath.dispose();
+        self.hash.dispose();
+    };
 }
