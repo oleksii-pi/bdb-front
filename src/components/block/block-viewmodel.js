@@ -32,7 +32,7 @@ module.exports = function (data, parentViewModel) {
 
     // linking:
 
-    self.inLinkPoint = ko.computed(() => ({x: self.x() + self.width() / 2, y: self.y()}));
+    self.inLinkPointViewModel = ko.computed(() => ({x: self.x() + self.width() / 2, y: self.y()}));
 
     self.outLinksCount = ko.computed(() => {
         var outLinksTitlesCount = self.out().split(',').length;

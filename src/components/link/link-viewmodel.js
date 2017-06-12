@@ -28,8 +28,8 @@ module.exports = function (data, parentViewModel) {
         result = result.concat(self.path());
 
         if (_destinationVM()) {
-            var xLast = _destinationVM().inLinkPoint().x;
-            var yLast = _destinationVM().inLinkPoint().y;
+            var xLast = _destinationVM().inLinkPointViewModel().x;
+            var yLast = _destinationVM().inLinkPointViewModel().y;
             result.push([xLast, yLast]);
         }
 
