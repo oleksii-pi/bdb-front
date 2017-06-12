@@ -34,15 +34,21 @@ module.exports = function (data, parentViewModel) {
 
     self.inLinkPoint = ko.computed(() => ({x: self.x() + self.width() / 2, y: self.y()}));
 
-    self.outLinksViewModel = ko.computed(() => {
-        return self.out().split(',').map(item => item.trim()); //! returns [''] for empty string
+    self.outLinksCount = ko.computed(() => {
+        var outLinksTitlesCount = self.out().split(',').length;
+        var diagramLinksCount = parentViewModel.getElementOutLinksCount(self.id());
+        var max = Math.max(outLinksTitlesCount, diagramLinksCount);
+        return max;
     });
 
-    self.outLinksCount = ko.computed(() => {
-        var outLinksCount = self.outLinksViewModel().length;
-        var diagramLinksCount = parentViewModel.getElementLinksCount(self.id());
-        var max = Math.max(outLinksCount, diagramLinksCount);
-        return max;
+    self.outLinksViewModel = ko.computed(() => {
+        var result = self.out().split(',').map(item => item.trim()); // bug'o'feature: returns [''] for empty string
+
+        var delta = self.outLinksCount() - result.length; // diagram can allready has more links than link titles
+        if (delta > 0) {
+            result = result.concat(new Array(delta).fill(''));
+        }
+        return result;
     });
 
     self.outLinksPoints = ko.computed(() => {

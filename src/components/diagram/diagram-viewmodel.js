@@ -177,10 +177,10 @@ module.exports = function (data) {
         return null;
     };
 
-    self.getElementLinksCount = (id) => {
+    self.getElementOutLinksCount = (id) => {
         var maxIndex = -1;
-        var indexes = self.links().filter(item => item.source == id).map(item => item.sourceOutIndex());
-        indexes.forEach(item => item > maxIndex ? maxIndex = item : 0); //! will it work ?
+        var indexes = self.links().filter(link => link.source() == id).map(link => link.sourceOutIndex());
+        indexes.forEach(item => (item > maxIndex) ? maxIndex = item : 0);
         return maxIndex + 1;
     };
 
