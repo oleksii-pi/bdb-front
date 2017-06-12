@@ -74,6 +74,7 @@ module.exports = function (data, parentViewModel) {
     });
 
     self.designerParams = [];
+    self.serializeParams = () => [self.id, self.component, self.source, self.sourceOutIndex, self.destination, self.path];
 
     self.dispose = () => {
         self.fullPath.dispose();

@@ -12,8 +12,6 @@ module.exports = function (data) {
 
     self.showCage = ko.observable(false).extend({dataType: "boolean"});
 
-    self.designerParams = [self.maxThreadCount, self.showCage];
-
     // not visible observables:
 
     self.showParams = ko.observable(true);
@@ -183,5 +181,46 @@ module.exports = function (data) {
         indexes.forEach(item => (item > maxIndex) ? maxIndex = item : 0);
         return maxIndex + 1;
     };
+
+    // serialization
+
+    self.serializeParams = () => [self.id, self.component, self.maxThreadCount, self.showCage];
+
+    function serializeComponent(component) {
+        var result = {};
+        var params = component.serializeParams();
+        params.forEach(param => {
+
+            var paramName = Object.keys(component)[ Object.values(component).indexOf(param)];
+            result[paramName] = param();
+        })
+        return result;
+    };
+
+    function getJSON() {
+        var data = serializeComponent(self);
+        data.elements = [];
+        data.links = [];
+
+        self.elements().forEach(element => data.elements.push(serializeComponent(element)));
+        self.links().forEach(link => data.links.push(serializeComponent(link)));
+
+        var json = JSON.stringify(data, null, 2);
+        return json;
+    };
+
+    function setJSON(newValue) {
+        // not implemented
+    };
+
+    self.json = ko.computed({
+        read: getJSON,
+        write: setJSON
+    }).extend({dataType: 'javascript'});
+
+    //
+
+    self.designerParams = [self.maxThreadCount, self.showCage, self.json];
+
 
 };

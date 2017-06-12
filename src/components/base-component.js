@@ -16,6 +16,7 @@ module.exports = function (component, data) {
     };
 
     self.designerParams = [self.x, self.y, self.width, self.height];
+    self.serializeParams = () => [self.id, self.component].concat(self.designerParams);
 
     var _viewChangers = [];
     self.addViewChangers = function () {
