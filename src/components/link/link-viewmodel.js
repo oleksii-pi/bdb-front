@@ -1,6 +1,6 @@
 var ko = require('knockout');
 
-module.exports = function (data, parentViewModel) {
+module.exports = function (data) {
     var self = this;
 
     self.id = ko.observable(data.id);
@@ -13,8 +13,10 @@ module.exports = function (data, parentViewModel) {
     self.path = ko.observableArray(data.path || []);
 
     // computed:
-    var _sourceVM = () => parentViewModel.getViewModelById(self.source());
-    var _destinationVM = () => parentViewModel.getViewModelById(self.destination());
+    self.diagramGetViewModelById = (id) => {}; // will be overridden by diagram
+
+    var _sourceVM = () => self.diagramGetViewModelById(self.source());
+    var _destinationVM = () => self.diagramGetViewModelById(self.destination());
 
     self.fullPath = ko.pureComputed(() => {
         var result = [];
@@ -44,9 +46,7 @@ module.exports = function (data, parentViewModel) {
         self.selected(!self.selected());
     };
 
-    self.commandCancel = function() {
-        parentViewModel.commandCancelLink();
-    };
+    self.commandCancelLink = () => {}; // will be overridden by diagram
 
     self.commandSetLastPoint = function(point) {
         self.path()[self.path().length - 1] = point;

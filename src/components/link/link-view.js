@@ -54,7 +54,7 @@ module.exports = function(vm, parentNode) {
             })
             .on('keydown.link', function() {
                if (d3.event.keyCode == 27) {
-                   vm.commandCancel();
+                   vm.commandCancelLink();
                }
             })
             .on('click.link', function() {

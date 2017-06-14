@@ -69,7 +69,7 @@ module.exports = function (data) {
 
         self.commandAdd = function (x, y, component) {
             var id = genNewId(component);
-            var vm = vmFactory({id: id, component: component, x: x, y: y}, self);  // create ViewModel with default data
+            var vm = vmFactory({id: id, component: component, x: x, y: y});  // create ViewModel with default data
             initElementSubscriptions(vm);
             self.commandDeselectAll();
             vm.commandSelect();
@@ -126,7 +126,7 @@ module.exports = function (data) {
 
                 var id = genNewId('link');
                 var linkData = {id: id, component: 'link', source: sourceViewModel.id(), sourceOutIndex: sourceOutIndex};
-                var vm = vmFactory(linkData, self);  // create ViewModel with default data
+                var vm = vmFactory(linkData);  // create ViewModel with default data
                 initElementSubscriptions(vm);
                 vm.commandSelect();
                 linking(vm);
@@ -192,7 +192,7 @@ module.exports = function (data) {
         var _viewModelArray = [];
         if (data.elements) {
             for (var i = 0; i < data.elements.length; i++) {
-                var vm = vmFactory(data.elements[i], self);
+                var vm = vmFactory(data.elements[i]);
                 initElementSubscriptions(vm);
                 _viewModelArray.push(vm);
             }
@@ -202,7 +202,7 @@ module.exports = function (data) {
         var _linksArray = [];
         if (data.links) {
             for (var i = 0; i < data.links.length; i++) {
-                var vm = vmFactory(data.links[i], self);
+                var vm = vmFactory(data.links[i]);
                 initElementSubscriptions(vm);
                 _linksArray.push(vm);
             }
@@ -211,6 +211,8 @@ module.exports = function (data) {
     };
 
     function initElementSubscriptions(vm) {
+        // blocks:
+
         if (vm.idBeforeChange) {
             vm.idBeforeChange(function(newValue, oldValue) {
                 var allowIdRename = !self.getViewModelById(newValue);
@@ -247,6 +249,16 @@ module.exports = function (data) {
 
         if (vm.diagramLinking) {
             vm.diagramLinking = self.linking;
+        }
+
+        // links:
+
+        if (vm.commandCancelLink) {
+            vm.commandCancelLink = self.commandCancelLink;
+        }
+
+        if (vm.diagramGetViewModelById) {
+            vm.diagramGetViewModelById = self.getViewModelById;
         }
     };
 
