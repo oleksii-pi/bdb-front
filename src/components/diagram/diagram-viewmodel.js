@@ -144,6 +144,7 @@ module.exports = function (data) {
         self.commandCancelLink = function () {
             var linking = self.linking;
             if (linking()) {
+                linking().dispose();
                 var index = self.links.indexOf(linking());
                 if (index > -1) {
                     self.links.splice(index, 1);
@@ -169,6 +170,17 @@ module.exports = function (data) {
             var indexes = self.links().filter(link => link.source() == id).map(link => link.sourceOutIndex());
             indexes.forEach(item => (item > maxIndex) ? maxIndex = item : 0);
             return maxIndex + 1;
+        };
+
+        self.elementRenamed = function (newValue, oldValue) {
+            self.links().forEach(link => {
+                if (link.source() == oldValue) {
+                    link.source(newValue);
+                }
+                if (link.destination() == oldValue) {
+                    link.destination(newValue);
+                }
+            });
         };
     };
 

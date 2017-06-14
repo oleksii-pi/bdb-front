@@ -2,6 +2,21 @@ var ko = require('knockout');
 
 ko.options.deferUpdates = true;
 
+//
+
+ko.subscribable.fn.subscribeChanged = function (callback) {
+    var _oldValue;
+    var self = this;
+
+    this.subscribe(function (oldValue) {
+        _oldValue = oldValue;
+    }, this, 'beforeChange');
+
+    this.subscribe(function (newValue) {
+        callback.call(self, newValue, _oldValue);
+    });
+};
+
 //// extenders
 
 ko.extenders.logChange = function(target, option) {

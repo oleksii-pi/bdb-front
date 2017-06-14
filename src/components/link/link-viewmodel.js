@@ -59,8 +59,8 @@ module.exports = function (data, parentViewModel) {
 
     //
 
-    self.destination.subscribe(function(newValue) {
-        if (newValue) {
+    self.destination.subscribeChanged(function(newValue, oldValue) {
+        if (!oldValue && newValue) {
             self.path.pop();
         }
     });

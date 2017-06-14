@@ -1,6 +1,6 @@
 var ko = require('knockout');
 
-module.exports = function (component, data) {
+module.exports = function (component, data, parentViewModel) {
     var self = component;
 
     self.id = ko.observable(data.id);
@@ -25,6 +25,10 @@ module.exports = function (component, data) {
         }
         self.hash = ko.pureComputed(() => _viewChangers.map(item => item()));
     };
+
+    if (parentViewModel) {
+        self.id.subscribeChanged(parentViewModel.elementRenamed);
+    }
 
     // add observables that affects view render:
     self.addViewChangers(self.id, self.x, self.y, self.width, self.height, self.selected);

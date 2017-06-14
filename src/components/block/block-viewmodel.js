@@ -4,7 +4,7 @@ var inheritBaseComponent = require('./../base-component');
 module.exports = function (data, parentViewModel) {
     data.width = data.width || 200;  // default while create new
     data.height = data.height || 150;
-    inheritBaseComponent(this, data);
+    inheritBaseComponent(this, data, parentViewModel);
 
     var self = this;
 
