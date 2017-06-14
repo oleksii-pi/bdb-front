@@ -17,7 +17,7 @@ ko.subscribable.fn.subscribeChanged = function (callback) {
     });
 };
 
-//// extenders
+//// extenders:
 
 ko.extenders.logChange = function(target, option) {
     target.subscribe(function(newValue) {
@@ -28,6 +28,22 @@ ko.extenders.logChange = function(target, option) {
     });
     return target;
 };
+
+ko.extenders.beforeChange = function (target, condition){
+    var result = ko.computed({
+        read: target,
+        write: function (newValue){
+            var oldValue = target();
+            var finalValue = (condition && !condition()(newValue, oldValue)) ? oldValue : newValue;
+            target(finalValue);
+            if (newValue != finalValue) {
+                target.notifySubscribers(finalValue);
+            }
+        }
+    }).extend({ notify: 'always'});
+    result(target());
+    return result;
+}
 
 // if next extender will replace original observable
 // dataType should be reassigned

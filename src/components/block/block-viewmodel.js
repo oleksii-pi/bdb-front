@@ -1,10 +1,10 @@
 var ko = require('knockout');
 var inheritBaseComponent = require('./../base-component');
 
-module.exports = function (data, parentViewModel) {
+module.exports = function (data) {
     data.width = data.width || 200;  // default while create new
     data.height = data.height || 150;
-    inheritBaseComponent(this, data, parentViewModel);
+    inheritBaseComponent(this, data);
 
     var self = this;
 
@@ -30,13 +30,20 @@ module.exports = function (data, parentViewModel) {
         }
     });
 
+    // will be overridden by diagram
+    self.commandStartLink = (outIndex) => { };
+    self.commandEndLink = () => { };
+    self.getDiagramLinksCount = () => { return 0;};
+    self.diagramLinking = () => {};
+    self.linking = ko.computed(() => self.diagramLinking());
+
     // linking:
 
     self.inLinkPointViewModel = ko.computed(() => ({x: self.x() + self.width() / 2, y: self.y()}));
 
     self.outLinksCount = ko.computed(() => {
         var outLinksTitlesCount = self.out().split(',').length;
-        var diagramLinksCount = parentViewModel.getElementOutLinksCount(self.id());
+        var diagramLinksCount = self.getDiagramLinksCount(self.id());
         var max = Math.max(outLinksTitlesCount, diagramLinksCount);
         return max;
     });
@@ -63,19 +70,9 @@ module.exports = function (data, parentViewModel) {
         return result;
     });
 
-    self.commandStartLink = (outIndex) => {
-        parentViewModel.commandStartLink(self, outIndex);
-    };
-
-    self.commandEndLink = () => {
-        parentViewModel.commandEndLink(self);
-    };
-
-    self.linking = ko.computed(() => parentViewModel.linking());
-
     //
 
-    self.addViewChangers(self.title, self.singleton, self.params, parentViewModel.linking, self.out);
+    self.addViewChangers(self.title, self.singleton, self.params, self.linking, self.out);
     self.designerParams.splice(0, 0, self.title);
     self.designerParams.push(self.singleton, self.params, self.out);
 

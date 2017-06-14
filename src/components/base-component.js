@@ -1,9 +1,11 @@
 var ko = require('knockout');
 
-module.exports = function (component, data, parentViewModel) {
+module.exports = function (component, data) {
     var self = component;
 
-    self.id = ko.observable(data.id);
+    self.idBeforeChange = ko.observable((newValue, oldValue) => true); // will be overridden by diagram
+
+    self.id = ko.observable(data.id).extend({beforeChange: self.idBeforeChange});
     self.component = ko.computed(() => data.component); // readonly
     self.x = ko.observable(data.x).extend({dataType: "float", precision: 2});
     self.y = ko.observable(data.y).extend({dataType: "float", precision: 2});
@@ -26,10 +28,10 @@ module.exports = function (component, data, parentViewModel) {
         self.hash = ko.pureComputed(() => _viewChangers.map(item => item()));
     };
 
-    if (parentViewModel) {
-        self.id.subscribeChanged(parentViewModel.elementRenamed);
-    }
-
     // add observables that affects view render:
     self.addViewChangers(self.id, self.x, self.y, self.width, self.height, self.selected);
+
+    self.dispose = function() {
+        self.idBeforeChange = null;
+    };
 }

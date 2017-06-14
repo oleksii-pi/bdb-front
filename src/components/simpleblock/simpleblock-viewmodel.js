@@ -1,8 +1,8 @@
 var ko = require('knockout');
 var inheritBaseComponent = require('./../base-component');
 
-module.exports = function (data, parentViewModel) {
-    inheritBaseComponent(this, data, parentViewModel);
+module.exports = function (data) {
+    inheritBaseComponent(this, data);
 
     var self = this;
 

@@ -70,6 +70,7 @@ module.exports = function (data) {
         self.commandAdd = function (x, y, component) {
             var id = genNewId(component);
             var vm = vmFactory({id: id, component: component, x: x, y: y}, self);  // create ViewModel with default data
+            initElementSubscriptions(vm);
             self.commandDeselectAll();
             vm.commandSelect();
             self.elements.push(vm);
@@ -126,6 +127,7 @@ module.exports = function (data) {
                 var id = genNewId('link');
                 var linkData = {id: id, component: 'link', source: sourceViewModel.id(), sourceOutIndex: sourceOutIndex};
                 var vm = vmFactory(linkData, self);  // create ViewModel with default data
+                initElementSubscriptions(vm);
                 vm.commandSelect();
                 linking(vm);
                 self.links.push(vm);
@@ -172,16 +174,6 @@ module.exports = function (data) {
             return maxIndex + 1;
         };
 
-        self.elementRenamed = function (newValue, oldValue) {
-            self.links().forEach(link => {
-                if (link.source() == oldValue) {
-                    link.source(newValue);
-                }
-                if (link.destination() == oldValue) {
-                    link.destination(newValue);
-                }
-            });
-        };
     };
 
     self.load = function(data) {
@@ -201,6 +193,7 @@ module.exports = function (data) {
         if (data.elements) {
             for (var i = 0; i < data.elements.length; i++) {
                 var vm = vmFactory(data.elements[i], self);
+                initElementSubscriptions(vm);
                 _viewModelArray.push(vm);
             }
         }
@@ -210,10 +203,51 @@ module.exports = function (data) {
         if (data.links) {
             for (var i = 0; i < data.links.length; i++) {
                 var vm = vmFactory(data.links[i], self);
+                initElementSubscriptions(vm);
                 _linksArray.push(vm);
             }
         }
         self.links(_linksArray);
+    };
+
+    function initElementSubscriptions(vm) {
+        if (vm.idBeforeChange) {
+            vm.idBeforeChange(function(newValue, oldValue) {
+                var allowIdRename = !self.getViewModelById(newValue);
+
+                if (allowIdRename) {
+                    self.links().forEach(link => {
+                        if (link.source() == oldValue) {
+                            link.source(newValue);
+                        }
+                        if (link.destination() == oldValue) {
+                            link.destination(newValue);
+                        }
+                    });
+                }
+                return allowIdRename;
+            });
+        }
+
+        if (vm.commandStartLink) {
+            vm.commandStartLink = (outIndex) => {
+                self.commandStartLink(vm, outIndex);
+            };
+        }
+
+        if (vm.commandEndLink) {
+            vm.commandEndLink = () => {
+                self.commandEndLink(vm);
+            };
+        }
+
+        if (vm.getDiagramLinksCount) {
+            vm.getDiagramLinksCount = self.getElementOutLinksCount;
+        }
+
+        if (vm.diagramLinking) {
+            vm.diagramLinking = self.linking;
+        }
     };
 
     self.save = function() {
