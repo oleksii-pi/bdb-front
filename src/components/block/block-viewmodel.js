@@ -78,4 +78,6 @@ module.exports = function (data, parentViewModel) {
     self.addViewChangers(self.title, self.singleton, self.params, parentViewModel.linking, self.out);
     self.designerParams.splice(0, 0, self.title);
     self.designerParams.push(self.singleton, self.params, self.out);
+
+    self.serializeParams = () => [self.id, self.component].concat(self.designerParams).concat(self.code);
 };

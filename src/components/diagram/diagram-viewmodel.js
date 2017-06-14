@@ -182,7 +182,7 @@ module.exports = function (data) {
         return maxIndex + 1;
     };
 
-    // serialization
+    // serialization:
 
     self.serializeParams = () => [self.id, self.component, self.maxThreadCount, self.showCage];
 
@@ -218,7 +218,7 @@ module.exports = function (data) {
         write: setJSON
     }).extend({dataType: 'javascript'});
 
-    //
+    // view params:
 
     self.designerParams = [self.maxThreadCount, self.showCage, self.json];
 
