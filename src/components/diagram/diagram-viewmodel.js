@@ -69,8 +69,9 @@ module.exports = function (data) {
 
         self.commandAdd = function (x, y, component) {
             var id = genNewId(component);
-            var vm = vmFactory({id: id, component: component, x: x, y: y});  // create ViewModel with default data
+            var vm = vmFactory(component);
             initElementSubscriptions(vm);
+            vm.load({id: id, component: component, x: x, y: y}); // create ViewModel with default data
             self.commandDeselectAll();
             vm.commandSelect();
             self.elements.push(vm);
@@ -81,6 +82,7 @@ module.exports = function (data) {
             elementsForDelete.forEach(element => {
                 self.links.remove(link => link.source() == element.id()).forEach(link => link.dispose());
                 self.links.remove(link => link.destination() == element.id()).forEach(link => link.dispose());
+                element.dispose();
             });
             self.elements.remove(element => element.selected());
             self.links.remove(link => link.selected()).forEach(link => link.dispose());
@@ -126,8 +128,9 @@ module.exports = function (data) {
 
                 var id = genNewId('link');
                 var linkData = {id: id, component: 'link', source: sourceViewModel.id(), sourceOutIndex: sourceOutIndex};
-                var vm = vmFactory(linkData);  // create ViewModel with default data
+                var vm = vmFactory('link');  // create ViewModel with default data
                 initElementSubscriptions(vm);
+                vm.load(linkData);
                 vm.commandSelect();
                 linking(vm);
                 self.links.push(vm);
@@ -192,8 +195,9 @@ module.exports = function (data) {
         var _viewModelArray = [];
         if (data.elements) {
             for (var i = 0; i < data.elements.length; i++) {
-                var vm = vmFactory(data.elements[i]);
+                var vm = vmFactory(data.elements[i].component);
                 initElementSubscriptions(vm);
+                vm.load(data.elements[i]);
                 _viewModelArray.push(vm);
             }
         }
@@ -202,12 +206,14 @@ module.exports = function (data) {
         var _linksArray = [];
         if (data.links) {
             for (var i = 0; i < data.links.length; i++) {
-                var vm = vmFactory(data.links[i]);
+                var vm = vmFactory('link');
                 initElementSubscriptions(vm);
+                vm.load(data.links[i]);
                 _linksArray.push(vm);
             }
         }
         self.links(_linksArray);
+
     };
 
     function initElementSubscriptions(vm) {
@@ -290,5 +296,4 @@ module.exports = function (data) {
     };
 
     self.init();
-    self.load(data);
 };

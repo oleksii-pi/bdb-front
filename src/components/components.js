@@ -6,9 +6,9 @@ var Components = function() {
         if (!c) throw new Error('Component not registered: ' + component);
         return c;
     };
-    self.ViewModelFactory = function(data) {
-        var vmFactory = self.get(data.component).ViewModelFactory;
-        return new vmFactory(data);
+    self.ViewModelFactory = function(component) {
+        var vmFactory = self.get(component).ViewModelFactory;
+        return new vmFactory();
     };
     self.ViewFactory = function(vm, parentNode) {
         var vFactory = self.get(vm.component()).ViewFactory;
