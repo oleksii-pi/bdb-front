@@ -9,6 +9,8 @@ module.exports = function (data) {
         self.component = ko.computed(() => 'diagram'); // readonly, const
         self.maxThreadCount = ko.observable(100).extend({dataType: "integer", range: {min: 1, max: 500}});
         self.showCage = ko.observable(false).extend({dataType: "boolean"});
+        self.loadingData = ko.observable(false).extend({dataType: "boolean"});
+
         self.elements = ko.observableArray([]);
         self.links = ko.observableArray([]);
 
@@ -33,10 +35,20 @@ module.exports = function (data) {
             }
         });
 
-        self.json = ko.computed({ read: self.save, write: () => { } }).extend({dataType: 'javascript'});
+        self.json = ko.computed({
+            read: self.save,
+            write: function(value) {
+                if (self.loadingData()) {
+                    self.loadingData(false);
+                    self.load(value);
+                }
+            }
+        }).extend({dataType: 'javascript'});
+
+        // view params:
+        self.designerParams = [self.maxThreadCount, self.showCage, self.loadingData, self.json];
 
         // commands:
-
         function genNewId(component) {
             var maxId = 0;
             if (component == 'link') {
@@ -158,12 +170,16 @@ module.exports = function (data) {
             indexes.forEach(item => (item > maxIndex) ? maxIndex = item : 0);
             return maxIndex + 1;
         };
-
-        // view params:
-        self.designerParams = [self.maxThreadCount, self.showCage, self.json];
     };
 
     self.load = function(data) {
+        if (typeof data === 'string') {
+            data = JSON.parse(data);
+        }
+
+        self.dragging(false);
+        self.linking(null);
+
         self.id(data.id);
         self.maxThreadCount(data.maxThreadCount || 100);
         self.showCage(data.showCage || false);
