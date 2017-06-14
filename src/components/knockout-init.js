@@ -1,5 +1,7 @@
 var ko = require('knockout');
 
+ko.options.deferUpdates = true;
+
 //// extenders
 
 ko.extenders.logChange = function(target, option) {
