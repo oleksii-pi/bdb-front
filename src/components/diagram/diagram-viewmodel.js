@@ -85,7 +85,9 @@ module.exports = function (data) {
                 element.dispose();
             });
             self.elements.remove(element => element.selected());
-            self.links.remove(link => link.selected()).forEach(link => link.dispose());
+            var linksForDelete = self.links().filter(link => link.selected());
+            linksForDelete.forEach(link => link.dispose());
+            self.links.remove(link => link.selected());
         };
 
         self.commandMoveSelected = function(deltaX, deltaY) {
@@ -141,6 +143,7 @@ module.exports = function (data) {
             var linking = self.linking;
             if (linking()) {
                 var linkVM = linking();
+                linkVM.path.pop(); // last point under mouse
                 linkVM.destination(destinationViewModel.id());
                 linking(null);
             }
@@ -156,7 +159,17 @@ module.exports = function (data) {
                 }
                 linking(null);
             }
-        }
+        };
+
+        self.commandSelectAll = function() {
+            self.elements().forEach(element => element.selected(true));
+            self.links().forEach(link => link.selected(true));
+        };
+
+        self.commandDeleteAll = function() {
+            self.commandSelectAll();
+            self.commandDeleteSelected();
+        };
 
         // public functions:
         self.getViewModelById = (id) => {
@@ -186,6 +199,8 @@ module.exports = function (data) {
 
         self.dragging(false);
         self.linking(null);
+        self.commandDeleteAll();
+        ko.tasks.runEarly();
 
         self.id(data.id);
         self.maxThreadCount(data.maxThreadCount || 100);

@@ -58,14 +58,6 @@ module.exports = function () {
 
         //
 
-        self.destination.subscribeChanged(function(newValue, oldValue) {
-            if (!oldValue && newValue) {
-                self.path.pop();
-            }
-        });
-
-        //
-
         self.hash = ko.computed(() => {
             return [
                 self.selected()
