@@ -43,8 +43,8 @@ var data =
                 "id": "textbox1",
                 "component": "textbox",
                 "text": "You can:\n- add new Block (alt + click)\n- each block can contain code, \nthat will be executed by engine\n- select multiple elements with shift\n- move selected with mouse or keyboard\n  (plus shift for accuracy)\n- delete selected (backspace, del)\n- resize selected with alt \n(plus shift for accuracy)\n- scale with mouse scroll or touch gestures\n- save and load diagram JSON",
-                "x": 4.74,
-                "y": 1.98,
+                "x": 21.74,
+                "y": 7.98,
                 "width": 300,
                 "height": 220
             },
@@ -52,11 +52,11 @@ var data =
                 "id": "start",
                 "component": "block",
                 "title": "Start",
-                "x": 307.2,
-                "y": 56.8,
-                "width": 212,
-                "height": 84,
-                "params": "url = https://api.domain.com;\nuser = testUser;\n",
+                "x": 405.2,
+                "y": 26.8,
+                "width": 232,
+                "height": 114,
+                "params": "url = https://api.domain.com;\nuser = apiUser;\npassword = apiPassword;\n",
                 "out": "",
                 "code": "// block code\nfunction main(out) {\n  // some init code\n  this.context.user = this.params.user;\n  return out;\n}"
             },
@@ -64,9 +64,9 @@ var data =
                 "id": "Check mail",
                 "component": "block",
                 "title": "Check orders",
-                "x": 273,
+                "x": 439,
                 "y": 205.58,
-                "width": 276.18,
+                "width": 166.18,
                 "height": 50,
                 "params": "",
                 "out": "yes, no",
@@ -75,10 +75,10 @@ var data =
             {
                 "id": "block3",
                 "component": "block",
-                "title": "Send email",
-                "x": 306.86,
-                "y": 330.64,
-                "width": 200,
+                "title": "Send confirmation email",
+                "x": 361.86,
+                "y": 297.64,
+                "width": 190,
                 "height": 60,
                 "params": "",
                 "out": "ok, error",
@@ -87,11 +87,11 @@ var data =
             {
                 "id": "Delay",
                 "component": "block",
-                "title": "Delay component",
-                "x": 319.83,
-                "y": 455.59,
-                "width": 200,
-                "height": 74,
+                "title": "Delay",
+                "x": 355.83,
+                "y": 531.59,
+                "width": 108.17,
+                "height": 62.41,
                 "params": "sleep=200ms;",
                 "out": "",
                 "code": "// block code\nfunction main(callback) {\n  // here is a code for delay prototype:\n  // endTask is a special function for async return control\n  setTimeout(() => endTask(callback), this.params.sleep)\n}"
@@ -99,24 +99,12 @@ var data =
             {
                 "id": "block4",
                 "component": "block",
-                "title": "block4",
-                "x": 188.8,
-                "y": 307.63,
-                "width": 76.26,
-                "height": 50,
-                "params": "",
-                "out": "",
-                "code": "// block code"
-            },
-            {
-                "id": "block5",
-                "component": "block",
-                "title": "block5",
-                "x": 185.13,
-                "y": 413.52,
-                "width": 88.44,
-                "height": 50,
-                "params": "",
+                "title": "Log error",
+                "x": 425,
+                "y": 404,
+                "width": 208,
+                "height": 65,
+                "params": "email=support@domain.com",
                 "out": "",
                 "code": "// block code"
             }
@@ -138,11 +126,11 @@ var data =
                 "destination": "Check mail",
                 "path": [
                     [
-                        553.7589721679688,
+                        663.7589721679688,
                         274.47723388671875
                     ],
                     [
-                        553.7589721679688,
+                        663.7589721679688,
                         181.434326171875
                     ]
                 ]
@@ -171,28 +159,28 @@ var data =
                 "destination": "Check mail",
                 "path": [
                     [
-                        494.3604431152344,
-                        579.1610717773438
+                        459,
+                        623
                     ],
                     [
-                        599.4697875976562,
-                        546.5919799804688
+                        684,
+                        594
                     ],
                     [
-                        617.2347412109375,
-                        314.1671142578125
+                        714,
+                        335
                     ],
                     [
-                        580.5247802734375,
-                        138.09927368164062
+                        692,
+                        156
                     ]
                 ]
             },
             {
                 "id": "link9",
                 "component": "link",
-                "source": "Check mail",
-                "sourceOutIndex": 0,
+                "source": "block3",
+                "sourceOutIndex": 1,
                 "destination": "block4",
                 "path": []
             },
@@ -201,41 +189,7 @@ var data =
                 "component": "link",
                 "source": "block4",
                 "sourceOutIndex": 0,
-                "destination": "block5",
-                "path": [
-                    [
-                        251.08668518066406,
-                        382.2546691894531
-                    ]
-                ]
-            },
-            {
-                "id": "link11",
-                "component": "link",
-                "source": "block3",
-                "sourceOutIndex": 1,
                 "destination": "Delay",
-                "path": []
-            },
-            {
-                "id": "link12",
-                "component": "link",
-                "source": "block4",
-                "sourceOutIndex": 0,
-                "destination": "block5",
-                "path": [
-                    [
-                        202.6640625,
-                        384.59942626953125
-                    ]
-                ]
-            },
-            {
-                "id": "link13",
-                "component": "link",
-                "source": "block4",
-                "sourceOutIndex": 0,
-                "destination": "block5",
                 "path": []
             }
         ]
