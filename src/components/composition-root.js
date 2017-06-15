@@ -249,12 +249,9 @@ module.exports.run = function (svgParentNode) {
     var diagramData = data;
 
     var diagramViewModel = components.ViewModelFactory('diagram');
-    diagramViewModel.load(diagramData);
     var diagramView = components.ViewFactory(diagramViewModel, svgParentNode);
+    diagramViewModel.load(diagramData);
 
-    //debug initialize repaint:
-    diagramViewModel.elements.valueHasMutated();
-    diagramViewModel.links.valueHasMutated();
     //debug initialize selection:
     diagramViewModel.elements()[0].commandSelect();
 
