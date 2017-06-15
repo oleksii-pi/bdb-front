@@ -82,9 +82,10 @@ module.exports = function () {
 
     var _load = self.load;
     self.load = function(data) {
-        _load.apply(this, arguments);
         data.width = data.width || 200;  // default while create new
         data.height = data.height || 150;
+
+        _load.apply(this, arguments);
 
         self.title(data.title || data.id);
         self.singleton(data.singleton);
