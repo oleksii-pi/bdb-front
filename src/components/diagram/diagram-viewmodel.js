@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var vmFactory = require('./../components').ViewModelFactory;
 
+
 module.exports = function (data) {
     var self = this;
 
@@ -49,7 +50,7 @@ module.exports = function (data) {
         self.designerParams = [self.maxThreadCount, self.showCage, self.loadingData, self.json];
 
         // commands:
-        function genNewId(component) {
+        var genNewId = function(component) {
             var maxId = 0;
             if (component == 'link') {
                 self.links().forEach(item => {
@@ -171,6 +172,85 @@ module.exports = function (data) {
             self.commandDeleteSelected();
         };
 
+        // copy & paste:
+
+        var _clipboard;
+
+        self.commandCopySelectedToClipboard = function() {
+            var data = {};
+            data.elements = [];
+            data.links = [];
+
+            self.elements().forEach(element => {
+                if (element.selected()) {
+                    data.elements.push(serializeComponent(element));
+                }
+            });
+            self.links().forEach(link => {
+                if (link.selected()
+                        && link.source()
+                        && link.destination()
+                        && self.getViewModelById(link.source())
+                        && self.getViewModelById(link.destination())
+                        && self.getViewModelById(link.source()).selected()
+                        && self.getViewModelById(link.destination()).selected()
+                    ) {
+                    data.links.push(serializeComponent(link));
+                }
+            });
+
+            var json = JSON.stringify(data, null, 2);
+            _clipboard = json;
+        };
+
+        self.commandPasteFromClipboard = function() {
+            self.commandDeselectAll();
+
+            var data;
+            try {
+                data = JSON.parse(_clipboard);
+            } catch (err) {
+                return;
+            }
+
+            var elementsIdMap = {};
+
+            // loading elements, than links:
+            if (data.elements) {
+                for (var i = 0; i < data.elements.length; i++) {
+                    var elementData = data.elements[i];
+                    var component = elementData.component;
+
+                    var oldId = elementData.id;
+                    var newId = genNewId(component);
+                    elementData.id = newId;
+                    elementsIdMap[oldId] = newId;
+
+                    var vm = vmFactory(component);
+                    initElementSubscriptions(vm);
+                    vm.load(elementData);
+                    vm.selected(true);
+                    self.elements.push(vm);
+                }
+            }
+
+            if (data.links) {
+                for (var i = 0; i < data.links.length; i++) {
+                    var newId = genNewId('link');
+                    var linkData = data.links[i];
+                    linkData.id = newId;
+                    linkData.source = elementsIdMap[linkData.source];
+                    linkData.destination = elementsIdMap[linkData.destination];
+
+                    var vm = vmFactory('link');
+                    initElementSubscriptions(vm);
+                    vm.load(linkData);
+                    vm.selected(true);
+                    self.links.push(vm);
+                }
+            }
+        };
+
         // public functions:
         self.getViewModelById = (id) => {
             if (id == null || typeof id === 'undefined') {
@@ -283,17 +363,17 @@ module.exports = function (data) {
         }
     };
 
-    self.save = function() {
-        function serializeComponent(component) {
-            var result = {};
-            var params = component.serializeParams();
-            params.forEach(param => {
-                var paramName = Object.keys(component)[ Object.values(component).indexOf(param)];
-                result[paramName] = param();
-            })
-            return result;
-        };
+    function serializeComponent(component) {
+        var result = {};
+        var params = component.serializeParams();
+        params.forEach(param => {
+            var paramName = Object.keys(component)[ Object.values(component).indexOf(param)];
+            result[paramName] = param();
+        })
+        return result;
+    };
 
+    self.save = function() {
         var data = serializeComponent(self);
         data.elements = [];
         data.links = [];

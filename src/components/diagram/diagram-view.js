@@ -47,6 +47,40 @@ module.exports = function(vm, parentNode) {
             }
         }
 
+        // ctrl/command + C, V, X
+        if (d3.event.ctrlKey || d3.event.metaKey) {
+            // copy
+            if (d3.event.keyCode == 67) {
+                vm.commandCopySelectedToClipboard();
+
+                if (d3.event) {
+                    d3.event.preventDefault();
+                    d3.event.stopPropagation();
+                }
+            }
+
+            // cut
+            if (d3.event.keyCode == 88) {
+                vm.commandCopySelectedToClipboard();
+                vm.commandDeleteSelected();
+
+                if (d3.event) {
+                    d3.event.preventDefault();
+                    d3.event.stopPropagation();
+                }
+            }
+
+            // paste
+            if (d3.event.keyCode == 86) {
+                vm.commandPasteFromClipboard();
+
+                if (d3.event) {
+                    d3.event.preventDefault();
+                    d3.event.stopPropagation();
+                }
+            }
+        }
+
         var multiplier = 10;
         if (d3.event.shiftKey) {
             multiplier = 1;
