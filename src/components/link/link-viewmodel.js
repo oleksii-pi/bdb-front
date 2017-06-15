@@ -13,8 +13,10 @@ module.exports = function () {
         self.destination = ko.observable();
         self.path = ko.observableArray([]);
 
+        self.diagramStraightLinks = () => {}; // will be overridden by diagram
+
         // computed:
-        self.diagramGetViewModelById = (id) => {}; // will be overridden by diagram
+        self.diagramGetViewModelById = () => {}; // will be overridden by diagram
 
         var _sourceVM = () => self.diagramGetViewModelById(self.source());
         var _destinationVM = () => self.diagramGetViewModelById(self.destination());
@@ -60,7 +62,8 @@ module.exports = function () {
 
         self.hash = ko.computed(() => {
             return [
-                self.selected()
+                self.selected(),
+                self.diagramStraightLinks()
             ].concat(self.fullPath());
         });
 

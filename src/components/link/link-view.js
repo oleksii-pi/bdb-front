@@ -7,7 +7,8 @@ module.exports = function(vm, parentNode) {
 
     var svg = $(parentNode).closest('svg')[0];
 
-    var line = d3.line().curve(d3.curveNatural);
+    var lineCurveNatural = d3.line().curve(d3.curveNatural);
+    var lineCurveLinear = d3.line().curve(d3.curveLinear);
 
     if ($(svg).find('defs > marker#end-arrow').length == 0) {
         d3.select(svg).append('svg:defs').append('svg:marker')
@@ -81,6 +82,8 @@ module.exports = function(vm, parentNode) {
     ;
 
     function update() {
+        var line = vm.diagramStraightLinks() ? lineCurveLinear : lineCurveNatural;
+
         svgPath
             .datum(vm.fullPath())
             .attr("d", line)

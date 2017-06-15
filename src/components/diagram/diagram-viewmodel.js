@@ -10,6 +10,7 @@ module.exports = function (data) {
         self.component = ko.computed(() => 'diagram'); // readonly, const
         self.maxThreadCount = ko.observable(100).extend({dataType: "integer", range: {min: 1, max: 500}});
         self.showCage = ko.observable(false).extend({dataType: "boolean"});
+        self.straightLinks = ko.observable(false).extend({dataType: "boolean"});
         self.loadingData = ko.observable(false).extend({dataType: "boolean"});
 
         self.elements = ko.observableArray([]);
@@ -20,7 +21,7 @@ module.exports = function (data) {
         self.dragging = ko.observable(false);
         self.linking = ko.observable(null);
 
-        self.serializeParams = () => [self.id, self.component, self.maxThreadCount, self.showCage];
+        self.serializeParams = () => [self.id, self.component, self.maxThreadCount, self.showCage, self.straightLinks];
 
         // computed:
         self.selectedElement = ko.computed(function(){
@@ -47,7 +48,7 @@ module.exports = function (data) {
         }).extend({dataType: 'javascript'});
 
         // view params:
-        self.designerParams = [self.maxThreadCount, self.showCage, self.loadingData, self.json];
+        self.designerParams = [self.maxThreadCount, self.showCage, self.straightLinks, self.loadingData, self.json];
 
         // commands:
         var genNewId = function(component) {
@@ -360,6 +361,10 @@ module.exports = function (data) {
 
         if (vm.diagramGetViewModelById) {
             vm.diagramGetViewModelById = self.getViewModelById;
+        }
+
+        if (vm.diagramStraightLinks) {
+            vm.diagramStraightLinks = self.straightLinks;
         }
     };
 
