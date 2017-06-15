@@ -33,9 +33,20 @@ module.exports = function(vm, parentNode) {
     });
 
     svg.on('keydown', function () {
-        if (d3.event.keyCode === 8) {
+        // backspace/delete
+        if (d3.event.keyCode === 8 || d3.event.keyCode === 46) {
             vm.commandDeleteSelected();
         }
+
+        // ctrl/command + A
+        if (d3.event.keyCode === 65 && (d3.event.ctrlKey || d3.event.metaKey)) {
+            vm.commandSelectAll();
+            if (d3.event) {
+                d3.event.preventDefault();
+                d3.event.stopPropagation();
+            }
+        }
+
         var multiplier = 10;
         if (d3.event.shiftKey) {
             multiplier = 1;
