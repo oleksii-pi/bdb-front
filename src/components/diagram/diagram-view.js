@@ -38,12 +38,27 @@ module.exports = function(vm, parentNode) {
             vm.commandDeleteSelected();
         }
 
-        // ctrl/command + A
-        if (d3.event.keyCode === 65 && (d3.event.ctrlKey || d3.event.metaKey)) {
-            vm.commandSelectAll();
-            if (d3.event) {
-                d3.event.preventDefault();
-                d3.event.stopPropagation();
+        if (d3.event.ctrlKey || d3.event.metaKey) {
+            // ctrl/command + A
+            if (d3.event.keyCode === 65) {
+                vm.commandSelectAll();
+                if (d3.event) {
+                    d3.event.preventDefault();
+                    d3.event.stopPropagation();
+                }
+            }
+
+            // ctrl/command + Z
+            if (d3.event.keyCode === 90) {
+                if (d3.event.shiftKey) {
+                    vm.commandRedo();
+                } else {
+                    vm.commandUndo();
+                }
+                if (d3.event) {
+                    d3.event.preventDefault();
+                    d3.event.stopPropagation();
+                }
             }
         }
 

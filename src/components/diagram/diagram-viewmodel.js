@@ -1,7 +1,6 @@
 var ko = require('knockout');
 var vmFactory = require('./../components').ViewModelFactory;
 
-
 module.exports = function (data) {
     var self = this;
 
@@ -20,6 +19,7 @@ module.exports = function (data) {
         self.showParams = ko.observable(true);
         self.dragging = ko.observable(false);
         self.linking = ko.observable(null);
+        self.maxUndoCount = ko.observable(100);
 
         self.serializeParams = () => [self.id, self.component, self.maxThreadCount, self.showCage, self.straightLinks];
 
@@ -45,12 +45,35 @@ module.exports = function (data) {
                     self.load(value);
                 }
             }
-        }).extend({dataType: 'javascript'});
+        }).extend({ rateLimit: { timeout: 1000, method: "notifyWhenChangesStop" } }).extend({dataType: 'javascript'});
 
         // view params:
         self.designerParams = [self.maxThreadCount, self.showCage, self.straightLinks, self.loadingData, self.json];
 
+        // auto save, undo, redo:
+
+        var operationFinished = function(newValue) {
+            if (!newValue) {
+                self.json.notifySubscribersImmediately(self.json());
+            }
+        };
+
+        self.dragging.subscribe(operationFinished);
+        self.linking.subscribe(operationFinished);
+
+        var _json = '';
+        self.json.subscribe(function(newValue) {
+            if (!self.dragging() && !self.linking() && _json != newValue) {
+                _json = newValue; // can be called multiple times with the same newValue (after dragging, linking)
+
+                console.log('json changed');
+
+                
+            }
+        });
+
         // commands:
+
         var genNewId = function(component) {
             var maxId = 0;
             if (component == 'link') {
@@ -250,6 +273,16 @@ module.exports = function (data) {
                     self.links.push(vm);
                 }
             }
+        };
+
+        // undo, redo:
+
+        self.commandUndo = function() {
+
+        };
+
+        self.commandRedo = function() {
+
         };
 
         // public functions:
