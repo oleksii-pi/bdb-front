@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var vmFactory = require('./../components').ViewModelFactory;
+var jsonDiff = require('deep-diff').default;
 
 module.exports = function (data) {
     var self = this;
@@ -19,7 +20,11 @@ module.exports = function (data) {
         self.showParams = ko.observable(true);
         self.dragging = ko.observable(false);
         self.linking = ko.observable(null);
+
+        self.undoRedo = ko.observable(false);
         self.maxUndoCount = ko.observable(100);
+        self.undoActions = ko.observableArray([]);
+        self.redoActions = ko.observableArray([]);
 
         self.serializeParams = () => [self.id, self.component, self.maxThreadCount, self.showCage, self.straightLinks];
 
@@ -45,32 +50,10 @@ module.exports = function (data) {
                     self.load(value);
                 }
             }
-        }).extend({ rateLimit: { timeout: 1000, method: "notifyWhenChangesStop" } }).extend({dataType: 'javascript'});
+        }).extend({ rateLimit: { timeout: 100, method: "notifyWhenChangesStop" } }).extend({dataType: 'javascript'});
 
         // view params:
         self.designerParams = [self.maxThreadCount, self.showCage, self.straightLinks, self.loadingData, self.json];
-
-        // auto save, undo, redo:
-
-        var operationFinished = function(newValue) {
-            if (!newValue) {
-                self.json.notifySubscribersImmediately(self.json());
-            }
-        };
-
-        self.dragging.subscribe(operationFinished);
-        self.linking.subscribe(operationFinished);
-
-        var _json = '';
-        self.json.subscribe(function(newValue) {
-            if (!self.dragging() && !self.linking() && _json != newValue) {
-                _json = newValue; // can be called multiple times with the same newValue (after dragging, linking)
-
-                console.log('json changed');
-
-                
-            }
-        });
 
         // commands:
 
@@ -277,12 +260,77 @@ module.exports = function (data) {
 
         // undo, redo:
 
-        self.commandUndo = function() {
+        // auto save, undo, redo:
 
+        var operationFinished = function(newValue) {
+            if (!newValue) {
+                self.json.notifySubscribersImmediately(self.json());
+            }
+        };
+
+        self.dragging.subscribe(operationFinished);
+        self.linking.subscribe(operationFinished);
+
+        var _json;
+        self.json.subscribe(function(newValue) {
+            // can be called multiple times with the same newValue (after dragging, linking)
+
+            if (self.undoRedo()) {
+                _json = newValue;
+                self.undoRedo(false);
+                return;
+            }
+
+            if (!self.dragging() && !self.linking() && _json != newValue) {
+                console.log('json changed');
+
+                if (_json) {
+                    var oldObj = JSON.parse(_json);
+                    var newObj = JSON.parse(newValue);
+
+                    var difference = jsonDiff.diff(oldObj, newObj);
+                    if (difference) {
+                        self.undoActions.push(difference);
+                        if (self.undoActions.length > self.maxUndoCount()) {
+                            self.undoActions = self.undoActions.slice(-self.maxUndoCount());
+                        }
+                        self.redoActions([]);
+                    } else
+                        console.error('Unsuspected undefined difference between diagram json old and new values');
+                }
+
+                _json = newValue;
+            }
+        });
+
+        self.commandUndo = function() {
+            var difference = self.undoActions.pop();
+            if (difference) {
+                self.redoActions.push(difference);
+                var json = JSON.parse(self.json());
+                difference.reverse();
+                difference.forEach(change => jsonDiff.revertChange(json, {}, change));
+                var jsonString = JSON.stringify(json);
+
+                self.undoRedo(true);
+                self.loadingData(true);
+                self.json(jsonString);
+            }
         };
 
         self.commandRedo = function() {
+            var difference = self.redoActions.pop();
+            if (difference) {
+                self.undoActions.push(difference);
+                var json = JSON.parse(self.json());
+                difference.reverse();
+                difference.forEach(change => jsonDiff.applyChange(json, {}, change));
+                var jsonString = JSON.stringify(json);
 
+                self.undoRedo(true);
+                self.loadingData(true);
+                self.json(jsonString);
+            }
         };
 
         // public functions:
@@ -314,7 +362,8 @@ module.exports = function (data) {
         self.dragging(false);
         self.linking(null);
         self.commandDeleteAll();
-        ko.tasks.runEarly();
+
+        ko.tasks.runEarly(); // force view update for deleting data
 
         self.id(data.id);
         self.maxThreadCount(data.maxThreadCount || 100);

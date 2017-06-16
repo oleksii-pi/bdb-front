@@ -11,6 +11,7 @@
   "dependencies": {
     "codemirror": "^5.26.0",
     "d3": "^4.9.1",
+    "deep-diff": "^0.3.8",
     "jquery": "^3.2.1",
     "knockout": "^3.4.2",
     "reset-css": "^2.2.0",
