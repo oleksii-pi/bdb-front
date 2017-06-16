@@ -2,6 +2,8 @@ var ko = require('knockout');
 var vmFactory = require('./../components').ViewModelFactory;
 var jsonDiff = require('deep-diff').default;
 
+const saveDiagramInterval = 1000;
+
 module.exports = function (data) {
     var self = this;
 
@@ -50,7 +52,7 @@ module.exports = function (data) {
                     self.load(value);
                 }
             }
-        }).extend({ rateLimit: { timeout: 100, method: "notifyWhenChangesStop" } }).extend({dataType: 'javascript'});
+        }).extend({ rateLimit: { timeout: saveDiagramInterval, method: "notifyWhenChangesStop" } }).extend({dataType: 'string'});
 
         // view params:
         self.designerParams = [self.maxThreadCount, self.showCage, self.straightLinks, self.loadingData, self.json];
@@ -175,8 +177,10 @@ module.exports = function (data) {
         };
 
         self.commandDeleteAll = function() {
-            self.commandSelectAll();
-            self.commandDeleteSelected();
+            self.links().forEach(link => link.dispose());
+            self.links.removeAll();
+            self.elements().forEach(element => element.dispose());
+            self.elements.removeAll();
         };
 
         // copy & paste:
@@ -391,7 +395,6 @@ module.exports = function (data) {
             }
         }
         self.links(_linksArray);
-
     };
 
     function initElementSubscriptions(vm) {
