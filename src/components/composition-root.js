@@ -38,15 +38,16 @@ var data =
         "component": "diagram",
         "maxThreadCount": 100,
         "showCage": true,
+        "straightLinks": false,
         "elements": [
             {
                 "id": "textbox1",
                 "component": "textbox",
-                "text": "You can:\n- add new Block (alt + click)\n- each block can contain code, \nthat will be executed by engine\n- select multiple elements with shift\n- move selected with mouse or keyboard\n  (plus shift for accuracy)\n- delete selected (backspace, del)\n- resize selected with alt \n(plus shift for accuracy)\n- scale with mouse scroll or touch gestures\n- save and load diagram JSON",
+                "text": "You can:\n- add new Block (alt + click)\n- each block can contain code, \nthat will be executed by engine\n- select multiple elements with shift\n- move selected with mouse or keyboard\n  (plus shift for accuracy)\n- delete selected (backspace, del)\n- resize selected with alt \n(plus shift for accuracy)\n- scale with mouse scroll or touch gestures\n- save and load diagram JSON\n- ctrl + C, V, X, A\n- undo/redo (ctrl/command + [shift] + Z)",
                 "x": 21.74,
                 "y": 7.98,
                 "width": 300,
-                "height": 220
+                "height": 250
             },
             {
                 "id": "start",
