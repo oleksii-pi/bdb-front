@@ -202,18 +202,25 @@ module.exports = function(vm, parentNode) {
     vm.showCage.subscribe(newValue => {
         if (newValue) {
             var svgBounds = svg.node().getBoundingClientRect();
-            var width = ~~svgBounds.width; // ~~ = round
-            var height = ~~svgBounds.height; // ~~ = round
+
+            // ~~ = round:
+            var width = ~~svgBounds.width;
+            var height = ~~svgBounds.height;
+
+            var left = -width;
+            var top = -height;
+            width = width * 3;
+            height = height * 3;
 
             cageGroup.insert("g", 'g')
                 .attr("class", "x axis")
                 .selectAll("line")
-                .data(d3.range(0, width, 10))
+                .data(d3.range(left, width, 10))
                 .enter().append("line")
                 .attr("x1", function (d) {
                     return d;
                 })
-                .attr("y1", 0)
+                .attr("y1", top)
                 .attr("x2", function (d) {
                     return d;
                 })
@@ -222,9 +229,9 @@ module.exports = function(vm, parentNode) {
             cageGroup.insert("g", 'g')
                 .attr("class", "y axis")
                 .selectAll("line")
-                .data(d3.range(0, height, 10))
+                .data(d3.range(top, height, 10))
                 .enter().append("line")
-                .attr("x1", 0)
+                .attr("x1", left)
                 .attr("y1", function (d) {
                     return d;
                 })
