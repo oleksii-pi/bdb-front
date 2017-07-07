@@ -15,13 +15,38 @@ module.exports = function(vm, parentNode) {
     var linksGroup = rootScalableGroup.append('g').classed('links', true);
     var elementsGroup = rootScalableGroup.append('g').classed('elements', true);
 
+    // menu and saving indicator:
+
     var menusGroup = svg.append('g').classed('menus', true);
-    menusGroup
+    var indicatorGroup = menusGroup.append('g').classed('indicator', true);
+
+    indicatorGroup
+        .append('rect')
+        .attr('fill', 'white')
+        .attr('x', 10)
+        .attr('y', 0)
+        .attr('width', 60)
+        .attr('height', 14)
+    ;
+
+    indicatorGroup
         .append('text')
-        .attr('class', 'savingIndicator')
+        .attr('fill', 'gray')
         .attr('x', 10)
         .attr('y', 10)
+        .text('saving...')
     ;
+
+    vm.saving.subscribe(newValue => {
+        indicatorGroup
+            .attr('visibility', 'visible')
+            .transition()
+            .delay(500)
+            .duration(100)
+            .attr('visibility', 'hidden');
+    });
+
+    // end menu and saving indicator:
 
     var focusDiagram = () => svg.node().focus();
     focusDiagram();
@@ -203,16 +228,6 @@ module.exports = function(vm, parentNode) {
     vm.linking.subscribe(newValue => {
         elementsGroup.selectAll('.linkIn')
             .attr('visibility', newValue ? 'visible' : 'hidden');
-    });
-
-    vm.saving.subscribe(newValue => {
-        menusGroup.select('.savingIndicator')
-            .text('saving...')
-            .attr('visibility', 'visible')
-            .transition()
-            .delay(500)
-            .duration(100)
-            .attr('visibility', 'hidden');
     });
 
     vm.showCage.subscribe(newValue => {
