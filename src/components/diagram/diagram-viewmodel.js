@@ -24,7 +24,7 @@ module.exports = function (data) {
         self.linking = ko.observable(null);
 
         self.undoRedo = ko.observable(false);
-        self.maxUndoCount = ko.observable(3);
+        self.maxUndoCount = ko.observable(100);
         self.undoActions = ko.observableArray([]);
         self.redoActions = ko.observableArray([]);
 
@@ -293,8 +293,8 @@ module.exports = function (data) {
                     var difference = jsonDiff.diff(oldObj, newObj);
                     if (difference) {
                         self.undoActions.push(difference);
-                        if (self.undoActions.length > self.maxUndoCount()) {
-                            self.undoActions = self.undoActions.slice(-self.maxUndoCount());
+                        if (self.undoActions().length > self.maxUndoCount()) {
+                            self.undoActions(self.undoActions.slice(-self.maxUndoCount()));
                         }
                         self.redoActions([]);
                     } else
