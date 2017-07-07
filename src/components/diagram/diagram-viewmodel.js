@@ -308,7 +308,7 @@ module.exports = function (data) {
         self.commandUndo = function() {
             var difference = self.undoActions.pop();
             if (difference) {
-                self.redoActions.push(difference);
+                self.redoActions.push(difference.slice());
                 var json = JSON.parse(self.json());
                 difference.reverse();
                 difference.forEach(change => jsonDiff.revertChange(json, {}, change));
@@ -323,7 +323,7 @@ module.exports = function (data) {
         self.commandRedo = function() {
             var difference = self.redoActions.pop();
             if (difference) {
-                self.undoActions.push(difference);
+                self.undoActions.push(difference.slice());
                 var json = JSON.parse(self.json());
                 difference.reverse();
                 difference.forEach(change => jsonDiff.applyChange(json, {}, change));
