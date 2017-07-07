@@ -10,10 +10,18 @@ module.exports = function(vm, parentNode) {
         .attr('tabindex', 1)
     ;
 
-    var rootGroup = svg.append('g').classed('root', true);
-    var cageGroup = rootGroup.append('g').classed('cage', true);
-    var linksGroup = rootGroup.append('g').classed('links', true);
-    var elementsGroup = rootGroup.append('g').classed('elements', true);
+    var rootScalableGroup = svg.append('g').classed('root', true);
+    var cageGroup = rootScalableGroup.append('g').classed('cage', true);
+    var linksGroup = rootScalableGroup.append('g').classed('links', true);
+    var elementsGroup = rootScalableGroup.append('g').classed('elements', true);
+
+    var menusGroup = svg.append('g').classed('menus', true);
+    menusGroup
+        .append('text')
+        .attr('class', 'savingIndicator')
+        .attr('x', 10)
+        .attr('y', 10)
+    ;
 
     var focusDiagram = () => svg.node().focus();
     focusDiagram();
@@ -131,12 +139,10 @@ module.exports = function(vm, parentNode) {
 
 
 
-
-
     svg.call(d3.zoom()
         .scaleExtent([0.3, 8])
         .on("zoom", function() {
-            rootGroup.attr("transform", d3.event.transform);
+            rootScalableGroup.attr("transform", d3.event.transform);
         }));
 
     function update(data, parentGroup) {
@@ -197,6 +203,16 @@ module.exports = function(vm, parentNode) {
     vm.linking.subscribe(newValue => {
         elementsGroup.selectAll('.linkIn')
             .attr('visibility', newValue ? 'visible' : 'hidden');
+    });
+
+    vm.saving.subscribe(newValue => {
+        menusGroup.select('.savingIndicator')
+            .text('saving...')
+            .attr('visibility', 'visible')
+            .transition()
+            .delay(500)
+            .duration(100)
+            .attr('visibility', 'hidden');
     });
 
     vm.showCage.subscribe(newValue => {

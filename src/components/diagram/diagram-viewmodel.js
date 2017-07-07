@@ -2,7 +2,7 @@ var ko = require('knockout');
 var vmFactory = require('./../components').ViewModelFactory;
 var jsonDiff = require('deep-diff').default;
 
-const saveDiagramInterval = 500;
+const saveDiagramInterval = 300;
 
 module.exports = function (data) {
     var self = this;
@@ -24,6 +24,7 @@ module.exports = function (data) {
         self.linking = ko.observable(null);
 
         self.undoRedo = ko.observable(false);
+        self.saving = ko.observable(false).extend({ notify: 'always' });;
         self.maxUndoCount = ko.observable(100);
         self.undoActions = ko.observableArray([]);
         self.redoActions = ko.observableArray([]);
@@ -467,11 +468,12 @@ module.exports = function (data) {
         var data = serializeComponent(self);
         data.elements = [];
         data.links = [];
-
         self.elements().forEach(element => data.elements.push(serializeComponent(element)));
         self.links().forEach(link => data.links.push(serializeComponent(link)));
-
         var json = JSON.stringify(data, null, 2);
+
+        self.saving(true);
+
         return json;
     };
 
