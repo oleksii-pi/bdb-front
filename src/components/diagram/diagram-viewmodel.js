@@ -2,7 +2,7 @@ var ko = require('knockout');
 var vmFactory = require('./../components').ViewModelFactory;
 var jsonDiff = require('deep-diff').default;
 
-const saveDiagramInterval = 1000;
+const saveDiagramInterval = 500;
 
 module.exports = function (data) {
     var self = this;
@@ -13,7 +13,7 @@ module.exports = function (data) {
         self.maxThreadCount = ko.observable(100).extend({dataType: "integer", range: {min: 1, max: 500}});
         self.showCage = ko.observable(false).extend({dataType: "boolean"});
         self.straightLinks = ko.observable(false).extend({dataType: "boolean"});
-        self.loadingData = ko.observable(false).extend({dataType: "boolean"});
+        self.loadingData = ko.observable(false).extend({dataType: "boolean"}); //! get rid of this
 
         self.elements = ko.observableArray([]);
         self.links = ko.observableArray([]);
@@ -24,7 +24,7 @@ module.exports = function (data) {
         self.linking = ko.observable(null);
 
         self.undoRedo = ko.observable(false);
-        self.maxUndoCount = ko.observable(100);
+        self.maxUndoCount = ko.observable(3);
         self.undoActions = ko.observableArray([]);
         self.redoActions = ko.observableArray([]);
 
@@ -277,7 +277,7 @@ module.exports = function (data) {
 
         var _json;
         self.json.subscribe(function(newValue) {
-            // can be called multiple times with the same newValue (after dragging, linking)
+            // can be called multiple times with the same newValue (after dragging, linking: they force immediate update)
 
             if (self.undoRedo()) {
                 _json = newValue;
@@ -286,8 +286,6 @@ module.exports = function (data) {
             }
 
             if (!self.dragging() && !self.linking() && _json != newValue) {
-                console.log('json changed');
-
                 if (_json) {
                     var oldObj = JSON.parse(_json);
                     var newObj = JSON.parse(newValue);
@@ -300,7 +298,7 @@ module.exports = function (data) {
                         }
                         self.redoActions([]);
                     } else
-                        console.error('Unsuspected undefined difference between diagram json old and new values');
+                        console.error('Unexpected undefined difference between diagram json old and new values');
                 }
 
                 _json = newValue;
@@ -395,6 +393,8 @@ module.exports = function (data) {
             }
         }
         self.links(_linksArray);
+
+        self.json.notifySubscribersImmediately(self.json()); // fix of initial undo saving
     };
 
     function initElementSubscriptions(vm) {
@@ -481,4 +481,5 @@ module.exports = function (data) {
     };
 
     self.init();
+
 };
