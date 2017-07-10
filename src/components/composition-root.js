@@ -199,8 +199,6 @@ var data =
 module.exports.run = function (svgParentNode) {
     //var diagramData = {component: 'diagram', id: 'diagram1'};
 
-    //debug:
-    //var diagramData = {component: 'diagram', id: 'diagram1', elements: [{component: 'textbox', id: 'textbox1', text: 'Some big welcome text.\nHello world!\n1\n2', x: 10, y: 10, width: 200, height: 100}]};
     var diagramData = data;
 
     var diagramViewModel = components.ViewModelFactory('diagram');
@@ -208,7 +206,7 @@ module.exports.run = function (svgParentNode) {
     diagramViewModel.load(diagramData);
 
     //debug initialize selection:
-    diagramViewModel.elements()[0].commandSelect();
+    //diagramViewModel.elements()[0].commandSelect();
 
     ko.applyBindings(diagramViewModel, $('#params')[0]); //! should be in another place ; consider: ko.applyBindings(diagramViewModel, paramsNode)
 };
