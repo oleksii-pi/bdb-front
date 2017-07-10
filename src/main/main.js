@@ -2,7 +2,7 @@ require('reset-css');
 
 require('./main.css');
 require('./menu/menu.css');
-require('./menu/menu.js');
+var menu = require('./menu/menu.js');
 require('./split.css');
 
 var split = require('split.js');
@@ -18,6 +18,7 @@ $(document).ready(function() {
         sizes: [70, 30],
         minSize: 200
     });
+    menu.init();
     compositionRoot.run($('#diagram')[0]);
 });
 

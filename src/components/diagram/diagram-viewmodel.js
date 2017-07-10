@@ -263,6 +263,16 @@ module.exports = function (data) {
             }
         };
 
+        self.commandCut = function() {
+            self.commandCopySelectedToClipboard();
+            self.commandDeleteSelected();
+        };
+
+        self.commandDuplicate = function() {
+            self.commandCopySelectedToClipboard();
+            self.commandPasteFromClipboard();
+        };
+
         // undo, redo:
 
         // auto save, undo, redo:

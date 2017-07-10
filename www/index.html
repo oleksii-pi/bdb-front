@@ -24,22 +24,22 @@
             <ul>
                 <li><span>File</span>
                     <ul>
-                        <li><span data-bind="click: commandNew">New</span></li>
+                        <li><span>New</span></li>
                         <li><span>Make a copy...</span></li>
                     </ul>
                 </li>
                 <li><span>Edit</span>
                     <ul>
-                        <li><span class='uncloseMenu'>Undo</span></li>
-                        <li><span class='uncloseMenu'>Redo</span></li>
+                        <li><span class='uncloseMenu' data-bind="click: commandUndo">Undo</span></li>
+                        <li><span class='uncloseMenu' data-bind="click: commandRedo">Redo</span></li>
                         <div class="separator"></div>
-                        <li><span>Cut</span></li>
-                        <li><span>Copy</span></li>
-                        <li><span>Paste</span></li>
-                        <li><span>Delete</span></li>
-                        <li><span>Duplicate</span></li>
+                        <li><span data-bind="click: commandCut">Cut</span></li>
+                        <li><span data-bind="click: commandCopySelectedToClipboard">Copy</span></li>
+                        <li><span data-bind="click: commandPasteFromClipboard">Paste</span></li>
+                        <li><span data-bind="click: commandDeleteSelected">Delete</span></li>
+                        <li><span data-bind="click: commandDuplicate">Duplicate</span></li>
                         <div class="separator"></div>
-                        <li><span>Select all</span></li>
+                        <li><span data-bind="click: commandSelectAll">Select all</span></li>
                     </ul>
                 </li>
                 <li><span>View</span>

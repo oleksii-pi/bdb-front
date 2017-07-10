@@ -209,5 +209,6 @@ module.exports.run = function (svgParentNode) {
     //diagramViewModel.elements()[0].commandSelect();
 
     ko.applyBindings(diagramViewModel, $('#params')[0]); //! should be in another place ; consider: ko.applyBindings(diagramViewModel, paramsNode)
+    ko.applyBindings(diagramViewModel, $('nav')[0]);
 };
 
