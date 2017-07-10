@@ -1,6 +1,8 @@
 require('reset-css');
 
 require('./main.css');
+require('./menu/menu.css');
+require('./menu/menu.js');
 require('./split.css');
 
 var split = require('split.js');
