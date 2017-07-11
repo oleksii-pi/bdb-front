@@ -43,7 +43,7 @@ module.exports = function(vm, parentNode) {
         var pt = svg.createSVGPoint();
         pt.x = x;
         pt.y = y;
-        pt = pt.matrixTransform(svgG.getCTM().inverse());
+        pt = pt.matrixTransform(svgG.getScreenCTM().inverse());
         return [pt.x, pt.y];
     };
 
