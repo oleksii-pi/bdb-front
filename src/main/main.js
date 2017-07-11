@@ -6,6 +6,10 @@ var menu = require('./menu/menu.js');
 require('./split.css');
 
 var split = require('split.js');
+
+var ko = require('knockout');
+require('./../components/knockout-init');
+
 var compositionRoot = require('./../components/composition-root');
 require('./params/params');
 
@@ -18,7 +22,28 @@ $(document).ready(function() {
         sizes: [70, 30],
         minSize: 200
     });
-    menu.init();
-    compositionRoot.run($('#diagram')[0], splitter);
+
+    compositionRoot.init();
+
+    var diagramViewModel = compositionRoot.run($('#diagram')[0]);
+
+    //diagramViewModel.elements()[0].commandSelect();
+
+    ko.applyBindings(diagramViewModel, $('#params')[0]);
+    ko.applyBindings(diagramViewModel, $('nav')[0]);
+
+    diagramViewModel.showParamsPanel.subscribe(function(newValue) {
+        if (newValue) {
+            splitter.setSizes([70, 30]);
+        } else {
+            splitter.collapse(1);
+        }
+    });
+
+    diagramViewModel.touchMode.subscribe(function(newValue) {
+        menu.initTouch(newValue);
+    });
+    var isTouch = menu.isTouchDevice();
+    diagramViewModel.touchMode(isTouch);
 });
 

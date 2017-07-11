@@ -1,36 +1,36 @@
 var components = require('./components');
-var ko = require('knockout');
-require('./knockout-init');
 
-components.register(
-    'diagram',
-    require('./diagram/diagram-viewmodel'),
-    require('./diagram/diagram-view')
-);
+module.exports.init = function () {
+    components.register(
+        'diagram',
+        require('./diagram/diagram-viewmodel'),
+        require('./diagram/diagram-view')
+    );
 
-components.register(
-    'simpleblock',
-    require('./simpleblock/simpleblock-viewmodel'),
-    require('./simpleblock/simpleblock-view')
-);
+    components.register(
+        'simpleblock',
+        require('./simpleblock/simpleblock-viewmodel'),
+        require('./simpleblock/simpleblock-view')
+    );
 
-components.register(
-    'textbox',
-    require('./textbox/textbox-viewmodel'),
-    require('./textbox/textbox-view')
-);
+    components.register(
+        'textbox',
+        require('./textbox/textbox-viewmodel'),
+        require('./textbox/textbox-view')
+    );
 
-components.register(
-    'block',
-    require('./block/block-viewmodel'),
-    require('./block/block-view')
-);
+    components.register(
+        'block',
+        require('./block/block-viewmodel'),
+        require('./block/block-view')
+    );
 
-components.register(
-    'link',
-    require('./link/link-viewmodel'),
-    require('./link/link-view')
-);
+    components.register(
+        'link',
+        require('./link/link-viewmodel'),
+        require('./link/link-view')
+    );
+}
 
 var data =
     {
@@ -196,29 +196,20 @@ var data =
         ]
     };
 
-module.exports.run = function (svgParentNode, splitter) {
-    //var diagramData = {component: 'diagram', id: 'diagram1'};
+module.exports.run = function (svgParentNode) {
+
+    /*
+    var diagramData = {component: 'diagram', id: 'diagram1'};
+    var diagramViewModel = components.ViewModelFactory('diagram');
+    var diagramView = components.ViewFactory(diagramViewModel, svgParentNode);
+    diagramViewModel.load(diagramData);
+    */
 
     var diagramData = data;
-
     var diagramViewModel = components.ViewModelFactory('diagram');
     var diagramView = components.ViewFactory(diagramViewModel, svgParentNode);
     diagramViewModel.load(diagramData);
 
-    //debug initialize selection:
-    //diagramViewModel.elements()[0].commandSelect();
-
-
-    //! next should be in another place ; consider: ko.applyBindings(diagramViewModel, paramsNode)
-    ko.applyBindings(diagramViewModel, $('#params')[0]);
-    ko.applyBindings(diagramViewModel, $('nav')[0]);
-
-    diagramViewModel.showParamsPanel.subscribe(function(newValue) {
-        if (newValue) {
-            splitter.setSizes([70, 30]);
-        } else {
-            splitter.collapse(1);
-        }
-    });
+    return diagramViewModel;
 };
 

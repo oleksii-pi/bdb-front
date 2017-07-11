@@ -1,13 +1,18 @@
 // https://jsfiddle.net/tolexis/m50wvdgz/1/
 
-module.exports.init = function () {
+module.exports.isTouchDevice = function () {
+    return false;
+    return 'ontouchstart' in window        // works on most browsers
+        || navigator.maxTouchPoints;       // works on IE10/11 and Surface
+};
 
-    var isTouchDevice = function () {
-        return 'ontouchstart' in window        // works on most browsers
-            || navigator.maxTouchPoints;       // works on IE10/11 and Surface
+module.exports.initTouch = function (touch) {
+
+    var initTouchMode = function () {
+        $('nav li').unbind();
+        $('nav span:not(.uncloseMenu)').unbind();
+        $('nav ul').css('display', "");
     };
-
-    var touchMode = isTouchDevice();
 
     var initDesktopMode = function() {
         $('nav li').hover(
@@ -19,16 +24,20 @@ module.exports.init = function () {
         });
 
         $('nav span:not(.uncloseMenu)').click(function(event) {
-
             $('nav ul li > ul').hide();
+        });
+
+        $('nav li').on('touchstart', function(event) {
+            $('nav ul li > ul')
+                .not($(this).parents('ul'))
+                .hide();
+            $(this).find('ul').first().toggle();
         });
     };
 
-
-    if (touchMode) {
-        //initTouchMode();
+    if (touch) {
+        initTouchMode();
     } else {
         initDesktopMode();
     }
-
-}
+};

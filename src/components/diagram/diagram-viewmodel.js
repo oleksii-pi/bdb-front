@@ -22,7 +22,7 @@ module.exports = function (data) {
 
         // view menu:
         self.scale = ko.observable(1).extend({ notify: 'always' });
-        self.touchMode = ko.observable(false);
+        self.touchMode = ko.observable();
         self.showCage = ko.observable(false).extend({dataType: "boolean"});
         self.straightLinks = ko.observable(false).extend({dataType: "boolean"});
         self.showParams = ko.observable(true);
