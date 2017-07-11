@@ -12,6 +12,7 @@ require('./../components/knockout-init');
 
 var compositionRoot = require('./../components/composition-root');
 require('./params/params');
+require('.././components/diagram/diagram.css'); // fix cage init: css loads immediate. without this, css loads after code execution
 
 window.onbeforeunload = function() {
     return "Are you sure you want to navigate away?";
