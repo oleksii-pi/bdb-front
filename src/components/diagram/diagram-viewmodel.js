@@ -22,9 +22,10 @@ module.exports = function (data) {
         self.showParams = ko.observable(true);
         self.dragging = ko.observable(false);
         self.linking = ko.observable(null);
+        self.scale = ko.observable(1).extend({ notify: 'always' });
 
         self.undoRedo = ko.observable(false);
-        self.saving = ko.observable(false).extend({ notify: 'always' });;
+        self.saving = ko.observable(false).extend({ notify: 'always' });
         self.maxUndoCount = ko.observable(100);
         self.undoActions = ko.observableArray([]);
         self.redoActions = ko.observableArray([]);
@@ -344,6 +345,10 @@ module.exports = function (data) {
                 self.loadingData(true);
                 self.json(jsonString);
             }
+        };
+
+        self.commandSetScale = function(value) {
+            self.scale(value);
         };
 
         // public functions:

@@ -163,12 +163,16 @@ module.exports = function(vm, parentNode) {
     });
 
 
-
-    svg.call(d3.zoom()
+    var zoom = d3.zoom()
         .scaleExtent([0.3, 8])
         .on("zoom", function() {
             rootScalableGroup.attr("transform", d3.event.transform);
-        }));
+        });
+    svg.call(zoom);
+
+    vm.scale.subscribe(newValue => {
+        zoom.scaleTo(svg, newValue);
+    });
 
     function update(data, parentGroup) {
         var elements = parentGroup.selectAll(() => parentGroup.node().childNodes).data(data, function (d) {
