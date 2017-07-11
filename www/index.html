@@ -48,10 +48,11 @@
                             <li><span class="uncloseMenu" data-bind="click: function() {commandSetScale(1)}">100%</span></li>
                             <li><span class="uncloseMenu" data-bind="click: function() {commandSetScale(2)}">200%</span></li>
                             <div class="separator"></div>
-                            <li><span class="uncloseMenu">Touch mode <input type="checkbox"></span></li>
-                            <li><span class="uncloseMenu">Cage <input type="checkbox"></span></li>
-                            <li><span class="uncloseMenu">Straight links <input type="checkbox"></span></li>
-                            <li><span class="uncloseMenu">Params <input type="checkbox"></span></li>
+                            <li><span class="uncloseMenu"><label>Touch mode <input type="checkbox" data-bind="checked: touchMode"></label></span></li>
+                            <li><span class="uncloseMenu"><label>Cage <input type="checkbox" data-bind="checked: showCage"></label></span></li>
+                            <li><span class="uncloseMenu"><label>Straight links <input type="checkbox" data-bind="checked: straightLinks"></label></span></li>
+                            <li><span class="uncloseMenu"><label>Element params <input type="checkbox" data-bind="checked: showParams"></label></span></li>
+                            <li><span class="uncloseMenu"><label>Params panel <input type="checkbox" data-bind="checked: showParamsPanel"></label></span></li>
                         </ul>
                     </li>
                     <li><span>Insert</span>

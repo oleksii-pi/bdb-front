@@ -14,11 +14,11 @@ window.onbeforeunload = function() {
 }
 
 $(document).ready(function() {
-    split(['#diagram', '#params'], {
+    var splitter = split(['#diagram', '#params'], {
         sizes: [70, 30],
         minSize: 200
     });
     menu.init();
-    compositionRoot.run($('#diagram')[0]);
+    compositionRoot.run($('#diagram')[0], splitter);
 });
 

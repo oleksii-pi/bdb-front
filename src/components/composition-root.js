@@ -196,7 +196,7 @@ var data =
         ]
     };
 
-module.exports.run = function (svgParentNode) {
+module.exports.run = function (svgParentNode, splitter) {
     //var diagramData = {component: 'diagram', id: 'diagram1'};
 
     var diagramData = data;
@@ -208,7 +208,17 @@ module.exports.run = function (svgParentNode) {
     //debug initialize selection:
     //diagramViewModel.elements()[0].commandSelect();
 
-    ko.applyBindings(diagramViewModel, $('#params')[0]); //! should be in another place ; consider: ko.applyBindings(diagramViewModel, paramsNode)
+
+    //! next should be in another place ; consider: ko.applyBindings(diagramViewModel, paramsNode)
+    ko.applyBindings(diagramViewModel, $('#params')[0]);
     ko.applyBindings(diagramViewModel, $('nav')[0]);
+
+    diagramViewModel.showParamsPanel.subscribe(function(newValue) {
+        if (newValue) {
+            splitter.setSizes([70, 30]);
+        } else {
+            splitter.collapse(1);
+        }
+    });
 };
 

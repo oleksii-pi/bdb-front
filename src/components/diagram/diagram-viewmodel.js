@@ -11,18 +11,22 @@ module.exports = function (data) {
         self.id = ko.observable();
         self.component = ko.computed(() => 'diagram'); // readonly, const
         self.maxThreadCount = ko.observable(100).extend({dataType: "integer", range: {min: 1, max: 500}});
-        self.showCage = ko.observable(false).extend({dataType: "boolean"});
-        self.straightLinks = ko.observable(false).extend({dataType: "boolean"});
         self.loadingData = ko.observable(false).extend({dataType: "boolean"}); //! get rid of this
 
         self.elements = ko.observableArray([]);
         self.links = ko.observableArray([]);
 
         // not visible observables:
-        self.showParams = ko.observable(true);
         self.dragging = ko.observable(false);
         self.linking = ko.observable(null);
+
+        // view menu:
         self.scale = ko.observable(1).extend({ notify: 'always' });
+        self.touchMode = ko.observable(false);
+        self.showCage = ko.observable(false).extend({dataType: "boolean"});
+        self.straightLinks = ko.observable(false).extend({dataType: "boolean"});
+        self.showParams = ko.observable(true);
+        self.showParamsPanel = ko.observable(true);
 
         self.undoRedo = ko.observable(false);
         self.saving = ko.observable(false).extend({ notify: 'always' });
