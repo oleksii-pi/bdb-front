@@ -93,6 +93,11 @@ module.exports = function (data) {
             self.elements.push(vm);
         };
 
+        self.pendingClickNewComponent = ko.observable(null);
+        self.commandAddComponent = function(component) {
+            self.pendingClickNewComponent(component);
+        };
+
         self.commandDeleteSelected = function() {
             var elementsForDelete = self.elements().filter(element => element.selected());
             elementsForDelete.forEach(element => {

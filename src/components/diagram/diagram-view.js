@@ -57,11 +57,12 @@ module.exports = function(vm, parentNode) {
         }
         focusDiagram();
 
-        if (d3.event.altKey) {  //!! implement according to UI state
+        if (vm.pendingClickNewComponent()) { 
             var mouse = d3.mouse(svg.select('g').node());
             var x = mouse[0];
             var y = mouse[1];
-            vm.commandAdd(x, y, 'block');
+            vm.commandAdd(x, y, vm.pendingClickNewComponent());
+            vm.pendingClickNewComponent(null);
         }
     });
 
@@ -232,6 +233,14 @@ module.exports = function(vm, parentNode) {
     vm.linking.subscribe(newValue => {
         elementsGroup.selectAll('.linkIn')
             .attr('visibility', newValue ? 'visible' : 'hidden');
+    });
+
+    vm.pendingClickNewComponent.subscribe(newValue => {
+        if (newValue) {
+            elementsGroup.style("cursor", "crosshair");
+        } else {
+            elementsGroup.style("cursor", "pointer");
+        }
     });
 
     vm.showCage.subscribe(newValue => {
