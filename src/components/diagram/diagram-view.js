@@ -189,12 +189,18 @@ module.exports = function(vm, parentNode) {
             })
             .on('mousedown', function(d) {
                 if (!vm.dragging()) {
-                    if (d3.event.shiftKey){
-                        d.commandSelect();
-                    } else {
+                    if (vm.touchMode()) {
                         if (!d.selected()) {
-                            vm.commandDeselectAll();
                             d.commandSelect();
+                        }
+                    } else {
+                        if (d3.event.shiftKey) {
+                            d.commandSelect();
+                        } else {
+                            if (!d.selected()) {
+                                vm.commandDeselectAll();
+                                d.commandSelect();
+                            }
                         }
                     }
                 };

@@ -3,7 +3,7 @@ require('./block.css');
 var ko = require('knockout');
 
 const margin = 4;
-const resizeRectSize = 5;
+const resizeRectSize = 7;
 const linkRadius = 6;
 
 module.exports = function(vm, parentNode) {
