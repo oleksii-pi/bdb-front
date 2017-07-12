@@ -1,6 +1,7 @@
 var d3 = require('d3');
 require('./diagram.css');
 var vFactory = require('./../components').ViewFactory;
+require('./touch.css');
 
 module.exports = function(vm, parentNode) {
 
@@ -240,6 +241,14 @@ module.exports = function(vm, parentNode) {
             elementsGroup.style("cursor", "crosshair");
         } else {
             elementsGroup.style("cursor", "pointer");
+        }
+    });
+
+    vm.touchMode.subscribe(newValue => {
+        if (newValue) {
+            $('body').addClass('touch');
+        } else {
+            $('body').removeClass('touch');
         }
     });
 
