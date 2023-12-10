@@ -2,4 +2,4 @@
 Block diagram builder front end single page application
 
 
-https://alekseypi.github.io/bdb/
+https://oleksii-pi.github.io/bdb/
